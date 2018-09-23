@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{82e3d5f7-47ef-4847-b3fb-284b1a8deadc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utf">
+      <UniqueIdentifier>{58e36cc8-cf10-4043-8fe2-db33986f1ac5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\i18n">
+      <UniqueIdentifier>{51548ff8-c93d-4d0d-87da-dc2a7b3a8230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\plugin">
+      <UniqueIdentifier>{2ae98a50-b4f6-41d5-8516-3017394025b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\preferences">
+      <UniqueIdentifier>{8a5b90a2-3b58-44f8-be57-9d7e673268b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\environment">
+      <UniqueIdentifier>{1a247dfd-9eee-4889-bec5-9df84e1803b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\runtime">
+      <UniqueIdentifier>{9412b0d3-5792-4308-abce-cf20c9b6443e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\db">
+      <UniqueIdentifier>{68637184-5c0d-4e51-94ef-8c1655043825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\sdk">
+      <UniqueIdentifier>{61bf71e5-1f7c-4a1c-a10b-f6d047e06e44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="utf\conv.h">
+      <Filter>src\utf</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\Message.h">
+      <Filter>src\runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\MessageQueue.h">
+      <Filter>src\runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\IMessage.h">
+      <Filter>src\runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\IMessageQueue.h">
+      <Filter>src\runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="runtime\IMessageTarget.h">
+      <Filter>src\runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IPreferences.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="preferences\Preferences.h">
+      <Filter>src\preferences</Filter>
+    </ClInclude>
+    <ClInclude Include="environment\Environment.h">
+      <Filter>src\environment</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\MessageQueue.cpp">
+      <Filter>src\runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="runtime\Message.cpp">
+      <Filter>src\runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="preferences\Preferences.cpp">
+      <Filter>src\preferences</Filter>
+    </ClCompile>
+    <ClCompile Include="environment\Environment.cpp">
+      <Filter>src\environment</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

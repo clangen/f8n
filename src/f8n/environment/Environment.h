@@ -36,8 +36,15 @@
 
 #include <string>
 #include <config.h>
+#include <preferences/Preferences.h>
 
 namespace f8n { namespace env {
+
+    void Initialize(const std::string& appName, int sdkVersion);
+
+    int GetSdkVersion();
+
+    std::shared_ptr<f8n::prefs::Preferences> GetDefaultPreferences();
 
     std::string GetHomeDirectory();
     std::string GetApplicationDirectory();
@@ -45,11 +52,14 @@ namespace f8n { namespace env {
     std::string GetPath(const std::string &sFile);
     std::string GetPluginDirectory();
     std::string NormalizeDir(std::string path);
+
     void OpenFile(const std::string& path);
     bool CopyFile(const std::string& from, const std::string& to);
+    bool FileToByteArray(const std::string& path, char** target, int& size, bool nullTerminate = false);
+
     int64_t Checksum(char *data,unsigned int bytes);
+
     size_t CopyString(const std::string& src, char* dst, size_t size);
     void ReplaceAll(std::string& input, const std::string& find, const std::string& replace);
-    bool FileToByteArray(const std::string& path, char** target, int& size, bool nullTerminate = false);
 
 } }

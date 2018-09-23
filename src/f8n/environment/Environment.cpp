@@ -58,6 +58,7 @@
 #endif
 
 using namespace f8n::utf;
+using namespace f8n::prefs;
 
 static std::string getDataDirectoryRoot() {
     std::string directory;
@@ -81,6 +82,22 @@ static inline void silentDelete(const std::string fn) {
 }
 
 namespace f8n { namespace env {
+    static const std::string DEFAULT_PREFERENCES = "default";
+    static std::string appName = "defaultAppName";
+    static int sdkVersion = 15;
+
+    void Initialize(const std::string& appName, int sdkVersion) {
+        f8n::env::appName = appName;
+        f8n::env::sdkVersion = sdkVersion;
+    }
+
+    int GetSdkVersion() {
+        return sdkVersion;
+    }
+
+    std::shared_ptr<Preferences> GetDefaultPreferences() {
+        return Preferences::ForComponent(DEFAULT_PREFERENCES);
+    }
 
     std::string GetPluginDirectory() {
         std::string path(GetApplicationDirectory());
@@ -147,10 +164,10 @@ namespace f8n { namespace env {
     std::string GetDataDirectory(bool create) {
         std::string directory =
 
-    #ifdef WIN32
-        getDataDirectoryRoot() + std::string("/musikcube/");
+#ifdef WIN32
+        getDataDirectoryRoot() + "/" + appName + "/";
     #else
-        getDataDirectoryRoot() + std::string("/.musikcube/");
+        getDataDirectoryRoot() + "/." + appName + "/";
     #endif
 
         if (create) {

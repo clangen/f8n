@@ -96,23 +96,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="debug\debug.h" />
     <ClInclude Include="environment\Environment.h" />
+    <ClInclude Include="i18n\Locale.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="plugins\PluginFactory.h" />
     <ClInclude Include="preferences\Preferences.h" />
     <ClInclude Include="runtime\IMessage.h" />
     <ClInclude Include="runtime\IMessageQueue.h" />
     <ClInclude Include="runtime\IMessageTarget.h" />
     <ClInclude Include="runtime\Message.h" />
     <ClInclude Include="runtime\MessageQueue.h" />
+    <ClInclude Include="sdk\IPlugin.h" />
     <ClInclude Include="sdk\IPreferences.h" />
     <ClInclude Include="utf\conv.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="debug\debug.cpp" />
     <ClCompile Include="environment\Environment.cpp" />
+    <ClCompile Include="i18n\Locale.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="plugins\PluginFactory.cpp" />
     <ClCompile Include="preferences\Preferences.cpp" />
     <ClCompile Include="runtime\Message.cpp" />
     <ClCompile Include="runtime\MessageQueue.cpp" />

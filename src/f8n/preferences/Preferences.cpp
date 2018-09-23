@@ -38,12 +38,15 @@
 #include <environment/Environment.h>
 #include <plugins/PluginFactory.h>
 #include <utf/conv.h>
+#include <environment/Environment.h>
 
 #include <unordered_map>
 
 using nlohmann::json;
 using namespace f8n::prefs;
+using namespace f8n::plugin;
 using namespace f8n::utf;
+using namespace f8n::env;
 
 static std::unordered_map<std::string, std::weak_ptr<Preferences> > componentCache;
 static std::unordered_map<std::string, std::shared_ptr<Preferences> > pluginCache;
@@ -52,7 +55,7 @@ static std::mutex cacheMutex;
 #define CACHE_KEY(name, mode) \
     boost::str(boost::format("%s-%s") % name % mode)
 
-#define FILENAME(x) musik::core::GetDataDirectory() + "/" + x + ".json"
+#define FILENAME(x) f8n::env::GetDataDirectory() + "/" + x + ".json"
 
 static FILE* openFile(const std::string& fn, const std::string& mode) {
 #ifdef WIN32
@@ -112,7 +115,7 @@ void Preferences::LoadPluginPreferences() {
 
     PluginFactory::Instance().QueryFunction<SetPreferencesPlugin>(
         "SetPreferences",
-        [](musik::core::sdk::IPlugin* plugin, SetPreferencesPlugin func) {
+        [](f8n::sdk::IPlugin* plugin, SetPreferencesPlugin func) {
             auto prefs = Preferences::ForPlugin(plugin->Name());
             func(prefs.get());
         });

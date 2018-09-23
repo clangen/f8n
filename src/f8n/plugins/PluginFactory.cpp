@@ -36,15 +36,9 @@
 #include <plugins/PluginFactory.h>
 #include <preferences/Preferences.h>
 #include <sdk/IPlugin.h>
+#include <debug/debug.h>
 #include <environment/Environment.h>
 #include <utf/conv.h>
-//#include <core/sdk/constants.h>
-//#include <core/plugin/PluginFactory.h>
-//#include <core/support/Preferences.h>
-//#include <core/support/PreferenceKeys.h>
-//#include <core/support/Common.h>
-//#include <core/config.h>
-//#include <core/debug.h>
 #include <iostream>
 
 static const std::string TAG = "PluginFactory";
@@ -56,12 +50,13 @@ using namespace f8n::sdk;
 using namespace f8n::prefs;
 using namespace f8n::utf;
 using namespace f8n::env;
+using namespace f8n;
 
 #ifdef WIN32
 typedef f8n::sdk::IPlugin* STDCALL(CallGetPlugin);
 static void closeNativeHandle(void* dll) { FreeLibrary((HMODULE)dll); }
 #else
-typedef musik::core::sdk::IPlugin* (*CallGetPlugin)();
+typedef f8n::sdk::IPlugin* (*CallGetPlugin)();
 static void closeNativeHandle(void* dll) { dlclose(dll); }
 #endif
 
@@ -122,7 +117,7 @@ void PluginFactory::LoadPlugins() {
                         if (getPluginCall) {
                             /* exists? check the version, and add it! */
                             auto plugin = getPluginCall();
-                            if (plugin->SdkVersion() == musik::core::sdk::SdkVersion) {
+                            if (plugin->SdkVersion() == f8n::env::GetSdkVersion()) {
                                 descriptor->plugin = plugin;
                                 descriptor->nativeHandle = dll;
                                 this->plugins.push_back(descriptor);
@@ -151,18 +146,13 @@ void PluginFactory::LoadPlugins() {
                         dll = dlopen(filename.c_str(), openFlags);
                     }
                     catch (...) {
-                        std::cerr << "exception while loading plugin " << filename << std::endl;
-
-                        musik::debug::err(TAG, "exception while loading plugin " + filename);
+                        f8n::debug::err(TAG, "exception while loading plugin " + filename);
                         continue;
                     }
 
                     if (!dll) {
                         char *err = dlerror();
-
-                        std::cerr << "exception while loading plugin " << filename << " " << err << std::endl;
-
-                        musik::debug::err(
+                        f8n::debug::err(
                             TAG,
                             "could not load shared library " + filename +
                             " error: " + std::string(err));
@@ -173,8 +163,8 @@ void PluginFactory::LoadPlugins() {
 
                         if (getPluginCall) {
                             auto plugin = getPluginCall();
-                            if (plugin->SdkVersion() == musik::core::sdk::SdkVersion) {
-                                musik::debug::info(TAG, "loaded: " + filename);
+                            if (plugin->SdkVersion() == f8n::env::SdkVersion) {
+                                f8n::debug::info(TAG, "loaded: " + filename);
                                 descriptor->plugin = getPluginCall();
                                 descriptor->nativeHandle = dll;
                                 this->plugins.push_back(descriptor);

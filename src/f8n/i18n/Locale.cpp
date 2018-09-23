@@ -37,13 +37,16 @@
 #include "Locale.h"
 #include <boost/filesystem.hpp>
 #include <environment/Environment.h>
+#include <preferences/Preferences.h>
 
 #define KEY_STRINGS "strings"
 #define KEY_DIMENSIONS "dimensions"
 #define DEFAULT_LOCALE "en_US"
+#define PREFERENCE_KEY_LOCALE "default"
 
 using namespace f8n::i18n;
 using namespace f8n::env;
+using namespace f8n::prefs;
 using namespace boost::filesystem;
 
 static nlohmann::json empty;
@@ -68,8 +71,8 @@ static nlohmann::json loadLocaleData(const std::string& fn) {
 }
 
 Locale::Locale() {
-    this->prefs = Preferences::ForComponent(components::Settings);
-    this->selectedLocale = prefs->GetString(keys::Locale, DEFAULT_LOCALE);
+    this->prefs = GetDefaultPreferences();
+    this->selectedLocale = prefs->GetString(PREFERENCE_KEY_LOCALE, DEFAULT_LOCALE);
 }
 
 Locale::~Locale() {
@@ -127,7 +130,7 @@ bool Locale::SetSelectedLocale(const std::string& locale) {
         if (!this->localeData.is_null()) {
             this->selectedLocale = locale;
 
-            prefs->SetString(keys::Locale, this->selectedLocale.c_str());
+            prefs->SetString(PREFERENCE_KEY_LOCALE, this->selectedLocale.c_str());
             prefs->Save();
 
             this->LocaleChanged(this->selectedLocale);

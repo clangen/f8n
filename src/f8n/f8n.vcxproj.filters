@@ -28,6 +28,9 @@
     <Filter Include="src\sdk">
       <UniqueIdentifier>{61bf71e5-1f7c-4a1c-a10b-f6d047e06e44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\debug">
+      <UniqueIdentifier>{7c037622-a990-48f2-ba01-bb798476a5e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -63,6 +66,18 @@
     <ClInclude Include="environment\Environment.h">
       <Filter>src\environment</Filter>
     </ClInclude>
+    <ClInclude Include="plugins\PluginFactory.h">
+      <Filter>src\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="sdk\IPlugin.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="i18n\Locale.h">
+      <Filter>src\i18n</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\debug.h">
+      <Filter>src\debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -79,6 +94,15 @@
     </ClCompile>
     <ClCompile Include="environment\Environment.cpp">
       <Filter>src\environment</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\PluginFactory.cpp">
+      <Filter>src\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="i18n\Locale.cpp">
+      <Filter>src\i18n</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\debug.cpp">
+      <Filter>src\debug</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

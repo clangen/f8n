@@ -11,7 +11,7 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
+[D]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
@@ -21,6 +21,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 **/obj
+bin/Debug/f8n.lib
 
 # Visual Studio 2015 cache/options directory
 .vs/

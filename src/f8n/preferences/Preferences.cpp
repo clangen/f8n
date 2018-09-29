@@ -39,7 +39,7 @@
 #include <plugins/Plugins.h>
 #include <utf/conv.h>
 #include <environment/Environment.h>
-
+#include <boost/format.hpp>
 #include <unordered_map>
 
 using nlohmann::json;

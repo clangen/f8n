@@ -75,14 +75,14 @@
     <ClInclude Include="i18n\Locale.h">
       <Filter>src\i18n</Filter>
     </ClInclude>
-    <ClInclude Include="debug\debug.h">
-      <Filter>src\debug</Filter>
-    </ClInclude>
     <ClInclude Include="plugins\Plugins.h">
       <Filter>src\plugin</Filter>
     </ClInclude>
     <ClInclude Include="net\HttpClient.h">
       <Filter>src\net</Filter>
+    </ClInclude>
+    <ClInclude Include="debug\debug.h">
+      <Filter>src\debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,11 +104,11 @@
     <ClCompile Include="i18n\Locale.cpp">
       <Filter>src\i18n</Filter>
     </ClCompile>
-    <ClCompile Include="debug\debug.cpp">
-      <Filter>src\debug</Filter>
-    </ClCompile>
     <ClCompile Include="plugins\Plugins.cpp">
       <Filter>src\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="debug\debug.cpp">
+      <Filter>src\debug</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

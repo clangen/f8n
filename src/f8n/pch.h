@@ -35,7 +35,5 @@
 #include "config.h"
 #include <memory>
 #include <boost/shared_ptr.hpp>
-#include <boost/iostreams/stream.hpp>
-#include <boost/format.hpp>
 #include <boost/filesystem.hpp>
 #include <utf/conv.h>

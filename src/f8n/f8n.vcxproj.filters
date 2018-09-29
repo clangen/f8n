@@ -31,6 +31,9 @@
     <Filter Include="src\debug">
       <UniqueIdentifier>{7c037622-a990-48f2-ba01-bb798476a5e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\net">
+      <UniqueIdentifier>{665b33fe-3795-4118-8e0e-0b02b8ef119d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -66,9 +69,6 @@
     <ClInclude Include="environment\Environment.h">
       <Filter>src\environment</Filter>
     </ClInclude>
-    <ClInclude Include="plugins\PluginFactory.h">
-      <Filter>src\plugin</Filter>
-    </ClInclude>
     <ClInclude Include="sdk\IPlugin.h">
       <Filter>src\sdk</Filter>
     </ClInclude>
@@ -77,6 +77,12 @@
     </ClInclude>
     <ClInclude Include="debug\debug.h">
       <Filter>src\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="plugins\Plugins.h">
+      <Filter>src\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="net\HttpClient.h">
+      <Filter>src\net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,14 +101,14 @@
     <ClCompile Include="environment\Environment.cpp">
       <Filter>src\environment</Filter>
     </ClCompile>
-    <ClCompile Include="plugins\PluginFactory.cpp">
-      <Filter>src\plugin</Filter>
-    </ClCompile>
     <ClCompile Include="i18n\Locale.cpp">
       <Filter>src\i18n</Filter>
     </ClCompile>
     <ClCompile Include="debug\debug.cpp">
       <Filter>src\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="plugins\Plugins.cpp">
+      <Filter>src\plugin</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -53,9 +53,9 @@
 
 namespace f8n { namespace plugin {
 
-    class PluginFactory {
+    class Plugins {
         public:
-            static PluginFactory& Instance();
+            static Plugins& Instance();
 
             template <typename T>
             struct ReleaseDeleter {
@@ -142,8 +142,8 @@ namespace f8n { namespace plugin {
                 std::string key;
             };
 
-            PluginFactory();
-            ~PluginFactory();
+            Plugins();
+            ~Plugins();
             void LoadPlugins();
 
             std::vector<std::shared_ptr<Descriptor> > plugins;

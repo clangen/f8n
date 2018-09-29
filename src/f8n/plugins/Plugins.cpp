@@ -33,7 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "pch.h"
-#include <plugins/PluginFactory.h>
+#include <plugins/Plugins.h>
 #include <preferences/Preferences.h>
 #include <sdk/IPlugin.h>
 #include <debug/debug.h>
@@ -41,7 +41,7 @@
 #include <utf/conv.h>
 #include <iostream>
 
-static const std::string TAG = "PluginFactory";
+static const std::string TAG = "Plugins";
 static const std::string PLUGINS_PREFERENCE = "PluginFactoryConfig";
 static std::mutex instanceMutex;
 
@@ -60,24 +60,24 @@ typedef f8n::sdk::IPlugin* (*CallGetPlugin)();
 static void closeNativeHandle(void* dll) { dlclose(dll); }
 #endif
 
-PluginFactory& PluginFactory::Instance() {
+Plugins& Plugins::Instance() {
     std::unique_lock<std::mutex> lock(instanceMutex);
 
-    static PluginFactory* instance = NULL;
+    static Plugins* instance = NULL;
 
     if (instance == NULL) {
-        instance = new PluginFactory();
+        instance = new Plugins();
     }
 
     return *instance;
 }
 
-PluginFactory::PluginFactory() {
+Plugins::Plugins() {
     this->prefs = Preferences::ForComponent(PLUGINS_PREFERENCE);
     this->LoadPlugins();
 }
 
-PluginFactory::~PluginFactory() {
+Plugins::~Plugins() {
     for (std::shared_ptr<Descriptor> plugin : this->plugins) {
         plugin->plugin->Release();
         closeNativeHandle(plugin->nativeHandle);
@@ -85,7 +85,7 @@ PluginFactory::~PluginFactory() {
     plugins.clear();
 }
 
-void PluginFactory::LoadPlugins() {
+void Plugins::LoadPlugins() {
 #ifdef WIN32
     {
         std::wstring wpath = u8to16(GetPluginDirectory());

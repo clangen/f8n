@@ -36,7 +36,7 @@
 
 #include "Preferences.h"
 #include <environment/Environment.h>
-#include <plugins/PluginFactory.h>
+#include <plugins/Plugins.h>
 #include <utf/conv.h>
 #include <environment/Environment.h>
 
@@ -113,7 +113,7 @@ static std::string pluginFilename(std::string name) {
 void Preferences::LoadPluginPreferences() {
     typedef void(*SetPreferencesPlugin)(f8n::sdk::IPreferences*);
 
-    PluginFactory::Instance().QueryFunction<SetPreferencesPlugin>(
+    Plugins::Instance().QueryFunction<SetPreferencesPlugin>(
         "SetPreferences",
         [](f8n::sdk::IPlugin* plugin, SetPreferencesPlugin func) {
             auto prefs = Preferences::ForPlugin(plugin->Name());

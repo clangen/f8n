@@ -180,37 +180,6 @@ namespace f8n { namespace env {
         return directory;
     }
 
-    void RemoveOldDlls() {
-    #ifdef WIN32
-        std::string path = GetPluginDirectory();
-        silentDelete(path + "libcurl.dll");
-        silentDelete(path + "crypto-41.dll");
-        silentDelete(path + "ssl-43.dll");
-        silentDelete(path + "tls-15.dll");
-    #endif
-    }
-
-    void MigrateOldDataDirectory() {
-        std::string oldDirectory =
-
-    #ifdef WIN32
-            getDataDirectoryRoot() + std::string("/mC2/");
-    #else
-            getDataDirectoryRoot() + std::string("/.mC2/");
-    #endif
-
-        std::string newDirectory = GetDataDirectory(false);
-
-        boost::filesystem::path oldPath(oldDirectory);
-        boost::filesystem::path newPath(newDirectory);
-
-        if (boost::filesystem::exists(oldPath) &&
-            !boost::filesystem::exists(newPath))
-        {
-            boost::filesystem::rename(oldPath, newPath);
-        }
-    }
-
     std::string GetPath(const std::string &sFile) {
         std::string sPath;
         int length;

@@ -37,7 +37,7 @@
 #include <boost/signals2.hpp>
 #include <string>
 
-namespace musik {
+namespace f8n {
     class debug {
     public:
         enum log_level {

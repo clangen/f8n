@@ -41,15 +41,11 @@
 #include <condition_variable>
 #include <memory>
 
-using namespace musik;
+using namespace f8n;
 
 boost::signals2::signal<void(debug::log_level, std::string, std::string)> debug::string_logged;
 
-namespace musik {
-    /*
-    * Basically ripped and simplified from message_queue. Log statements get
-    * enqueued and processed on a background thread.
-    */
+namespace f8n {
     class log_queue {
     public:
         struct log_entry {

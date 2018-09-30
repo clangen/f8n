@@ -10,3 +10,5 @@ the half-baked design goal for this repo is to maintain a small set of simple, u
   - debugging
 
 this is probably not useful to anyone except me.
+
+also, it doesn't work yet.

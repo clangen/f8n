@@ -32,8 +32,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "Environment.h"
-#include <utf/conv.h>
+#include <f8n/environment/Environment.h>
+#include <f8n/utf/conv.h>
 #include <cstdlib>
 #include <iostream>
 #include <fstream>

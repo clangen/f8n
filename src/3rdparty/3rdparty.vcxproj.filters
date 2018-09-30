@@ -441,6 +441,9 @@
     <ClInclude Include="win32_src\pdcurses\acs_defs.h">
       <Filter>src\pdcurses\src</Filter>
     </ClInclude>
+    <ClInclude Include="include\sigslot\sigslot.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="win32_src\pdcurses\README.md">

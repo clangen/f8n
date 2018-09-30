@@ -34,9 +34,9 @@
 
 #pragma once
 
-#include <config.h>
-#include <sdk/IPlugin.h>
-#include <sdk/IPreferences.h>
+#include <f8n/config.h>
+#include <f8n/sdk/IPlugin.h>
+#include <f8n/sdk/IPreferences.h>
 
 #include <vector>
 #include <iostream>

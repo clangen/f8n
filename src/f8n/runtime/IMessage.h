@@ -36,7 +36,7 @@
 
 #include <memory>
 
-namespace musik { namespace core { namespace runtime {
+namespace f8n { namespace runtime {
 
     class IMessageTarget;
 
@@ -51,4 +51,4 @@ namespace musik { namespace core { namespace runtime {
 
     typedef std::shared_ptr<IMessage> IMessagePtr;
 
-} } }
+} }

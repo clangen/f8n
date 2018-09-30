@@ -34,9 +34,9 @@
 
 #pragma once
 
-#include "IMessage.h"
+#include <f8n/runtime/IMessage.h>
 
-namespace musik { namespace core { namespace runtime {
+namespace f8n { namespace runtime {
 
     class IMessageTarget {
         public:
@@ -46,4 +46,4 @@ namespace musik { namespace core { namespace runtime {
 
     typedef std::shared_ptr<IMessageTarget> IMessageTargetPtr;
 
-} } }
+} }

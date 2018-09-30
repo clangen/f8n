@@ -32,10 +32,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "Locale.h"
+#include <f8n/i18n/Locale.h>
+#include <f8n/environment/Environment.h>
+#include <f8n/preferences/Preferences.h>
 #include <boost/filesystem.hpp>
-#include <environment/Environment.h>
-#include <preferences/Preferences.h>
 
 #define KEY_STRINGS "strings"
 #define KEY_DIMENSIONS "dimensions"

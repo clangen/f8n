@@ -37,8 +37,8 @@
 #include <memory>
 #include <vector>
 #include <mutex>
-#include <config.h>
-#include <sdk/IPreferences.h>
+#include <f8n/config.h>
+#include <f8n/sdk/IPreferences.h>
 #include <json.hpp>
 
 namespace f8n { namespace prefs {

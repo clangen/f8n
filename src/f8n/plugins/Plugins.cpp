@@ -32,12 +32,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <plugins/Plugins.h>
-#include <preferences/Preferences.h>
-#include <sdk/IPlugin.h>
-#include <debug/debug.h>
-#include <environment/Environment.h>
-#include <utf/conv.h>
+#include <f8n/plugins/Plugins.h>
+#include <f8n/preferences/Preferences.h>
+#include <f8n/sdk/IPlugin.h>
+#include <f8n/debug/debug.h>
+#include <f8n/environment/Environment.h>
+#include <f8n/utf/conv.h>
 #include <iostream>
 #include <boost/filesystem.hpp>
 

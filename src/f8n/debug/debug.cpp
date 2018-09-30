@@ -32,7 +32,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <debug/debug.h>
+#include <f8n/debug/debug.h>
 #include <functional>
 #include <string>
 #include <queue>
@@ -42,8 +42,6 @@
 #include <memory>
 
 using namespace f8n;
-
-boost::signals2::signal<void(debug::log_level, std::string, std::string)> debug::string_logged;
 
 namespace f8n {
     class log_queue {
@@ -132,7 +130,7 @@ static void thread_proc() {
         while (!cancel_) {
             log_queue::log_entry* entry = queue_->pop_top();
             if (entry) {
-                debug::string_logged(entry->level_, entry->tag_, entry->message_);
+                /* TODO CAL: call the impls */
                 delete entry;
             }
         }

@@ -34,7 +34,6 @@
 
 #pragma once
 
-#include <boost/signals2.hpp>
 #include <string>
 
 namespace f8n {
@@ -48,7 +47,6 @@ namespace f8n {
 
         static void init();
         static void deinit();
-        static boost::signals2::signal<void(log_level, std::string, std::string)> string_logged;
         static void log(log_level level, const std::string& tag, const std::string& string);
         static void info(const std::string& tag, const std::string& string);
         static void warn(const std::string& tag, const std::string& string);

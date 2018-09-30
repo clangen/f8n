@@ -32,13 +32,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "MessageQueue.h"
+#include <f8n/runtime/MessageQueue.h>
 #include <algorithm>
 #include <chrono>
 #include <iterator>
 
 using namespace std::chrono;
-using namespace musik::core::runtime;
+using namespace f8n::runtime;
 
 using LockT = std::unique_lock<std::mutex>;
 

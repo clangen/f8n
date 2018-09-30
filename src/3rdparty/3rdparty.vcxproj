@@ -143,6 +143,7 @@
     <ClCompile Include="win32_src\pdcurses\window.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\sigslot\sigslot.h" />
     <ClInclude Include="include\sqlite\sqlite3.h" />
     <ClInclude Include="include\sqlite\sqlite3ext.h" />
     <ClInclude Include="include\wcwidth.h" />

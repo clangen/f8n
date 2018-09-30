@@ -32,9 +32,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "Message.h"
+#include <f8n/runtime/Message.h>
 
-using namespace musik::core::runtime;
+using namespace f8n::runtime;
 
 IMessagePtr Message::Create(
     IMessageTarget* target,

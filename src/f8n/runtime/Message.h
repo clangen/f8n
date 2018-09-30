@@ -34,9 +34,9 @@
 
 #pragma once
 
-#include "IMessage.h"
+#include <f8n/runtime/IMessage.h>
 
-namespace musik { namespace core { namespace runtime {
+namespace f8n { namespace runtime {
     class Message : public IMessage {
         protected:
             Message(
@@ -65,4 +65,4 @@ namespace musik { namespace core { namespace runtime {
             int messageType;
             int64_t data1, data2;
     };
-} } }
+} }

@@ -35,8 +35,8 @@
 #pragma once
 
 #include <string>
-#include <config.h>
-#include <preferences/Preferences.h>
+#include <f8n/config.h>
+#include <f8n/preferences/Preferences.h>
 
 namespace f8n { namespace env {
 

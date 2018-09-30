@@ -34,7 +34,7 @@
 
 #pragma once
 
-#include "IMessageQueue.h"
+#include <f8n/runtime/IMessageQueue.h>
 
 #include <list>
 #include <mutex>
@@ -43,7 +43,7 @@
 #include <atomic>
 #include <set>
 
-namespace musik { namespace core { namespace runtime {
+namespace f8n { namespace runtime {
     class MessageQueue : public IMessageQueue {
         public:
             MessageQueue();
@@ -88,4 +88,4 @@ namespace musik { namespace core { namespace runtime {
 
             void Dispatch(IMessagePtr message);
     };
-} } }
+} }

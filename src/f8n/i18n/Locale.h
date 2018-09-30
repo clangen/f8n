@@ -34,17 +34,17 @@
 
 #pragma once
 
-#include <config.h>
-#include <preferences/Preferences.h>
+#include <f8n/config.h>
+#include <f8n/preferences/Preferences.h>
+#include <sigslot/sigslot.h>
 #include <unordered_map>
-#include <boost/signals2.hpp>
 #include <json.hpp>
 
 namespace f8n { namespace i18n {
 
     class Locale {
         public:
-            boost::signals2::signal<void(std::string)> LocaleChanged;
+            sigslot::signal1<std::string> LocaleChanged;
 
             ~Locale();
 
@@ -75,9 +75,9 @@ namespace f8n { namespace i18n {
             nlohmann::json defaultLocaleData;
     };
 
-    #define _TSTR(KEY) (musik::core::i18n::Locale::Instance().Translate(KEY))
-    #define _TCP(KEY) (musik::core::i18n::Locale::Instance().Translate(KEY).c_str())
-    #define _DIMEN(KEY, DEFAULT) (musik::core::i18n::Locale::Instance().Dimension(KEY, DEFAULT))
+    #define _TSTR(KEY) (f8n::i18n::Locale::Instance().Translate(KEY))
+    #define _TCP(KEY) (f8n::i18n::Locale::Instance().Translate(KEY).c_str())
+    #define _DIMEN(KEY, DEFAULT) (f8n::i18n::Locale::Instance().Dimension(KEY, DEFAULT))
 
 } }
 

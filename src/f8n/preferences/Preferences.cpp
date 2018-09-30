@@ -32,11 +32,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "Preferences.h"
-#include <environment/Environment.h>
-#include <plugins/Plugins.h>
-#include <utf/conv.h>
-#include <environment/Environment.h>
+#include <f8n/preferences/Preferences.h>
+#include <f8n/environment/Environment.h>
+#include <f8n/plugins/Plugins.h>
+#include <f8n/utf/conv.h>
+#include <f8n/environment/Environment.h>
 #include <boost/format.hpp>
 #include <unordered_map>
 

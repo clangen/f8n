@@ -34,25 +34,21 @@
 
 #pragma once
 
-#include "IMessage.h"
-#include "IMessageTarget.h"
+#include <f8n/runtime/IMessage.h>
+#include <f8n/runtime/IMessageTarget.h>
 
-namespace musik {
-    namespace core {
-        namespace runtime {
-            class IMessageQueue {
-                public:
-                    virtual ~IMessageQueue() { }
-                    virtual void Post(IMessagePtr message, int64_t delayMs = 0) = 0;
-                    virtual int Remove(IMessageTarget *target, int type = -1) = 0;
-                    virtual void Broadcast(IMessagePtr message, int64_t delayMs = 0) = 0;
-                    virtual bool Contains(IMessageTarget *target, int type = -1) = 0;
-                    virtual void Debounce(IMessagePtr message, int64_t delayMs = 0) = 0;
-                    virtual void RegisterForBroadcasts(IMessageTargetPtr target) = 0;
-                    virtual void UnregisterForBroadcasts(IMessageTarget *target) = 0;
-                    virtual void WaitAndDispatch(int64_t timeoutMillis = -1) = 0;
-                    virtual void Dispatch() = 0;
-            };
-        }
-    }
-}
+namespace f8n { namespace runtime {
+    class IMessageQueue {
+        public:
+            virtual ~IMessageQueue() { }
+            virtual void Post(IMessagePtr message, int64_t delayMs = 0) = 0;
+            virtual int Remove(IMessageTarget *target, int type = -1) = 0;
+            virtual void Broadcast(IMessagePtr message, int64_t delayMs = 0) = 0;
+            virtual bool Contains(IMessageTarget *target, int type = -1) = 0;
+            virtual void Debounce(IMessagePtr message, int64_t delayMs = 0) = 0;
+            virtual void RegisterForBroadcasts(IMessageTargetPtr target) = 0;
+            virtual void UnregisterForBroadcasts(IMessageTarget *target) = 0;
+            virtual void WaitAndDispatch(int64_t timeoutMillis = -1) = 0;
+            virtual void Dispatch() = 0;
+    };
+} }

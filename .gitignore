@@ -22,6 +22,8 @@ bld/
 [Ll]og/
 **/obj
 bin/Debug/f8n.lib
+**/__build
+**/__output
 
 # Visual Studio 2015 cache/options directory
 .vs/

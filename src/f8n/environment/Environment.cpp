@@ -32,13 +32,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "pch.h"
 #include "Environment.h"
 #include <utf/conv.h>
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
 
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
 #ifdef WIN32

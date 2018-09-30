@@ -36,9 +36,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="config.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -86,9 +83,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="runtime\MessageQueue.cpp">
       <Filter>src\runtime</Filter>
     </ClCompile>

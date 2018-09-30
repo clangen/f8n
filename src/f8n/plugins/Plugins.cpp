@@ -32,7 +32,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "pch.h"
 #include <plugins/Plugins.h>
 #include <preferences/Preferences.h>
 #include <sdk/IPlugin.h>
@@ -40,6 +39,7 @@
 #include <environment/Environment.h>
 #include <utf/conv.h>
 #include <iostream>
+#include <boost/filesystem.hpp>
 
 static const std::string TAG = "Plugins";
 static const std::string PLUGINS_PREFERENCE = "PluginFactoryConfig";

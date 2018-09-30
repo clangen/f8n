@@ -32,8 +32,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "pch.h"
-
 #include "Locale.h"
 #include <boost/filesystem.hpp>
 #include <environment/Environment.h>

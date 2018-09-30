@@ -32,10 +32,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "pch.h"
 #include "MessageQueue.h"
 #include <algorithm>
 #include <chrono>
+#include <iterator>
 
 using namespace std::chrono;
 using namespace musik::core::runtime;

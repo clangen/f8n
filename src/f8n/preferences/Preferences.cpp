@@ -32,8 +32,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "pch.h"
-
 #include "Preferences.h"
 #include <environment/Environment.h>
 #include <plugins/Plugins.h>

@@ -35,21 +35,46 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <fstream>
 
 namespace f8n {
     class debug {
     public:
-        enum log_level {
-            level_info = 0,
-            level_warning,
-            level_error
+        enum class level {
+            verbose = 0,
+            info = 1,
+            warning = 2,
+            error = 3
         };
 
-        static void init();
-        static void deinit();
-        static void log(log_level level, const std::string& tag, const std::string& string);
+        class backend {
+            public:
+                virtual void verbose(const std::string& tag, const std::string& string) = 0;
+                virtual void info(const std::string& tag, const std::string& string) = 0;
+                virtual void warning(const std::string& tag, const std::string& string) = 0;
+                virtual void error(const std::string& tag, const std::string& string) = 0;
+        };
+
+        class FileBackend : public backend {
+            public:
+                FileBackend(const std::string& fn);
+                FileBackend(FileBackend&& fn);
+                ~FileBackend();
+                virtual void verbose(const std::string& tag, const std::string& string) override;
+                virtual void info(const std::string& tag, const std::string& string) override;
+                virtual void warning(const std::string& tag, const std::string& string) override;
+                virtual void error(const std::string& tag, const std::string& string) override;
+            private:
+                std::ofstream out;
+        };
+
+        static void start(std::vector<backend*> backends);
+        static void stop();
+
+        static void verbose(const std::string& tag, const std::string& string);
         static void info(const std::string& tag, const std::string& string);
-        static void warn(const std::string& tag, const std::string& string);
-        static void err(const std::string& tag, const std::string& string);
+        static void warning(const std::string& tag, const std::string& string);
+        static void error(const std::string& tag, const std::string& string);
     };
 }

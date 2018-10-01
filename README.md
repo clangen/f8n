@@ -9,7 +9,7 @@ the half-baked design goal for this repo is to maintain a small set of simple, u
   - debugging
   - a lightweight set of unicode handling functionality to reduce boilerplate in utf16 windows apps and console-based programs.
 
-on Windows it provides pre-configured versions of
+on Windows it provides pre-configured versions of:
   - sqlite
   - libressl
   - curl

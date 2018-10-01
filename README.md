@@ -1,5 +1,5 @@
 # f8n
-foundational code i tend to find myself rewriting over and over again in every new project i start.
+foundational code i find myself rewriting over and over in every new project i create.
 
 the half-baked design goal for this repo is to maintain a small set of simple, usable (and in most cases dumb) abstractions that c++ doesn't provide out of the box. things include:
   - an easy to use http client

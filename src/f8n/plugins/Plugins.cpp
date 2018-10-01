@@ -146,13 +146,13 @@ void Plugins::LoadPlugins() {
                         dll = dlopen(filename.c_str(), openFlags);
                     }
                     catch (...) {
-                        f8n::debug::err(TAG, "exception while loading plugin " + filename);
+                        f8n::debug::error(TAG, "exception while loading plugin " + filename);
                         continue;
                     }
 
                     if (!dll) {
                         char *err = dlerror();
-                        f8n::debug::err(
+                        f8n::debug::error(
                             TAG,
                             "could not load shared library " + filename +
                             " error: " + std::string(err));
@@ -163,7 +163,7 @@ void Plugins::LoadPlugins() {
 
                         if (getPluginCall) {
                             auto plugin = getPluginCall();
-                            if (plugin->SdkVersion() == f8n::env::SdkVersion) {
+                            if (plugin->SdkVersion() == f8n::env::GetSdkVersion()) {
                                 f8n::debug::info(TAG, "loaded: " + filename);
                                 descriptor->plugin = getPluginCall();
                                 descriptor->nativeHandle = dll;

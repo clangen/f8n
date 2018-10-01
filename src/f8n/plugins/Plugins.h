@@ -37,7 +37,9 @@
 #include <f8n/config.h>
 #include <f8n/sdk/IPlugin.h>
 #include <f8n/sdk/IPreferences.h>
+#include <f8n/debug/debug.h>
 
+#include <functional>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -103,7 +105,7 @@ namespace f8n { namespace plugin {
                 QueryInterface<T, D>(
                     functionName,
                     [&plugins](
-                        musik::core::sdk::IPlugin* unused,
+                        f8n::sdk::IPlugin* unused,
                         std::shared_ptr<T> plugin,
                         const std::string& fn)
                         {

@@ -32,7 +32,7 @@ set (F8N_SRCS
 
 add_library(f8n STATIC ${F8N_SRCS})
 
-# target_link_libraries(f8n curses panel)
+target_link_libraries(f8n dl pthread)
 
 #file(GLOB sdk_headers "src/*.h")
 

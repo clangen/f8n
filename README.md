@@ -13,6 +13,7 @@ on Windows it provides pre-configured versions of
   - sqlite
   - libressl
   - curl
+  - zlib
   - pdcurses
   
 it also includes the following libraries for all platforms:

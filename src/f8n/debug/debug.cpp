@@ -45,7 +45,7 @@ using namespace f8n;
 
 class log_queue;
 
-static std::vector<std::unique_ptr<f8n::debug::backend>> backends;
+static std::vector<std::unique_ptr<f8n::debug::IBackend>> backends;
 static std::thread* thread = nullptr;
 static log_queue* queue = nullptr;
 static std::recursive_mutex mutex;
@@ -153,7 +153,7 @@ static void thread_proc() {
     }
 }
 
-void f8n::debug::start(std::vector<f8n::debug::backend*> backends) {
+void f8n::debug::start(std::vector<f8n::debug::IBackend*> backends) {
     std::unique_lock<std::recursive_mutex> lock(mutex);
 
     if (queue || thread) {
@@ -161,7 +161,7 @@ void f8n::debug::start(std::vector<f8n::debug::backend*> backends) {
     }
 
     for (auto backend : backends) {
-        ::backends.push_back(std::unique_ptr<f8n::debug::backend>(backend));
+        ::backends.push_back(std::unique_ptr<f8n::debug::IBackend>(backend));
     }
 
     cancel = false;

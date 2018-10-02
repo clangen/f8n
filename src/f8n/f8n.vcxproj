@@ -98,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
+    <ClInclude Include="db\Connection.h" />
+    <ClInclude Include="db\ScopedTransaction.h" />
+    <ClInclude Include="db\Statement.h" />
     <ClInclude Include="debug\debug.h" />
     <ClInclude Include="environment\Environment.h" />
     <ClInclude Include="i18n\Locale.h" />
@@ -114,6 +117,9 @@
     <ClInclude Include="utf\conv.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="db\Connection.cpp" />
+    <ClCompile Include="db\ScopedTransaction.cpp" />
+    <ClCompile Include="db\Statement.cpp" />
     <ClCompile Include="debug\debug.cpp" />
     <ClCompile Include="environment\Environment.cpp" />
     <ClCompile Include="i18n\Locale.cpp" />

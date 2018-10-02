@@ -21,6 +21,9 @@ include_directories (
 
 set (F8N_SRCS
   ./src/3rdparty/src/sqlite/sqlite3.c
+  ./src/f8n/db/Connection.cpp
+  ./src/f8n/db/ScopedTransaction.cpp
+  ./src/f8n/db/Statement.cpp
   ./src/f8n/debug/debug.cpp
   ./src/f8n/i18n/Locale.cpp
   ./src/f8n/runtime/Message.cpp

@@ -81,6 +81,15 @@
     <ClInclude Include="debug\debug.h">
       <Filter>src\debug</Filter>
     </ClInclude>
+    <ClInclude Include="db\ScopedTransaction.h">
+      <Filter>src\db</Filter>
+    </ClInclude>
+    <ClInclude Include="db\Statement.h">
+      <Filter>src\db</Filter>
+    </ClInclude>
+    <ClInclude Include="db\Connection.h">
+      <Filter>src\db</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="runtime\MessageQueue.cpp">
@@ -103,6 +112,15 @@
     </ClCompile>
     <ClCompile Include="debug\debug.cpp">
       <Filter>src\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="db\Statement.cpp">
+      <Filter>src\db</Filter>
+    </ClCompile>
+    <ClCompile Include="db\Connection.cpp">
+      <Filter>src\db</Filter>
+    </ClCompile>
+    <ClCompile Include="db\ScopedTransaction.cpp">
+      <Filter>src\db</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

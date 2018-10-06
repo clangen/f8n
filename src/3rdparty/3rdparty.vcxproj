@@ -90,6 +90,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\base64\base64.cpp" />
     <ClCompile Include="src\sqlite\sqlite3.c">
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level1</WarningLevel>
     </ClCompile>
@@ -145,6 +146,7 @@
     <ClCompile Include="win32_src\pdcurses\window.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\base64\base64.h" />
     <ClInclude Include="include\sigslot\sigslot.h" />
     <ClInclude Include="include\sqlite\sqlite3.h" />
     <ClInclude Include="include\sqlite\sqlite3ext.h" />

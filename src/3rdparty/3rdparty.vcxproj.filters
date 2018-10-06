@@ -23,6 +23,9 @@
     <Filter Include="src\pdcurses\src">
       <UniqueIdentifier>{aa390fb7-d618-4f09-abf1-5e9dd4f6feda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\base64">
+      <UniqueIdentifier>{c4edf51b-8715-4159-9aed-85ff127a1f4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sqlite\sqlite3.c">
@@ -177,6 +180,9 @@
     </ClCompile>
     <ClCompile Include="win32_src\pdcurses\addch.c">
       <Filter>src\pdcurses\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\base64\base64.cpp">
+      <Filter>src\base64</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,6 +449,9 @@
     </ClInclude>
     <ClInclude Include="include\sigslot\sigslot.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\base64\base64.h">
+      <Filter>src\base64</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

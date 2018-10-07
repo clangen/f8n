@@ -1,4 +1,4 @@
-/* $OpenBSD: crypto.h,v 1.47 2018/08/24 19:16:03 tb Exp $ */
+/* $OpenBSD: crypto.h,v 1.45 2018/03/19 03:35:38 beck Exp $ */
 /* ====================================================================
  * Copyright (c) 1998-2006 The OpenSSL Project.  All rights reserved.
  *
@@ -299,7 +299,6 @@ DECLARE_STACK_OF(CRYPTO_EX_DATA_FUNCS)
  * via CRYPTO_ex_data_new_class). */
 #define CRYPTO_EX_INDEX_USER		100
 
-#ifndef LIBRESSL_INTERNAL
 #define CRYPTO_malloc_init()		(0)
 #define CRYPTO_malloc_debug_init()	(0)
 
@@ -330,7 +329,6 @@ int CRYPTO_is_mem_check_on(void);
 #define OPENSSL_malloc_locked(num) \
 	CRYPTO_malloc_locked((int)num,__FILE__,__LINE__)
 #define OPENSSL_free_locked(addr) CRYPTO_free_locked(addr)
-#endif
 
 const char *OpenSSL_version(int type);
 #define OPENSSL_VERSION		0
@@ -495,11 +493,11 @@ long CRYPTO_dbg_get_options(void)
 	__attribute__ ((deprecated));
 
 
-int CRYPTO_mem_leaks_fp(FILE *);
-int CRYPTO_mem_leaks(struct bio_st *bio);
+void CRYPTO_mem_leaks_fp(FILE *);
+void CRYPTO_mem_leaks(struct bio_st *bio);
 /* unsigned long order, char *file, int line, int num_bytes, char *addr */
-typedef int *CRYPTO_MEM_LEAK_CB(unsigned long, const char *, int, int, void *);
-int CRYPTO_mem_leaks_cb(CRYPTO_MEM_LEAK_CB *cb);
+typedef void *CRYPTO_MEM_LEAK_CB(unsigned long, const char *, int, int, void *);
+void CRYPTO_mem_leaks_cb(CRYPTO_MEM_LEAK_CB *cb);
 
 /* die if we have to */
 void OpenSSLDie(const char *file, int line, const char *assertion);

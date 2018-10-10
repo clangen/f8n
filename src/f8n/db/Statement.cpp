@@ -35,6 +35,7 @@
 #include <f8n/db/Statement.h>
 #include <f8n/db/Connection.h>
 #include <sqlite/sqlite3.h>
+#include <string>
 
 using namespace f8n::db;
 

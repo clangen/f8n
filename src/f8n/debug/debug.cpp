@@ -40,6 +40,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <memory>
+#include <iostream>
 
 using namespace f8n;
 
@@ -51,16 +52,23 @@ static log_queue* queue = nullptr;
 static std::recursive_mutex mutex;
 static volatile bool cancel = true;
 
+enum class debug_level {
+    verbose = 0,
+    info = 1,
+    warning = 2,
+    error = 3
+};
+
 class log_queue {
     public:
         struct log_entry {
-            log_entry(debug::level l, const std::string& t, const std::string& m) {
+            log_entry(debug_level l, const std::string& t, const std::string& m) {
                 level = l;
                 tag = t;
                 message = m;
             }
 
-            debug::level level;
+            debug_level level;
             std::string tag;
             std::string message;
         };
@@ -131,16 +139,16 @@ static void thread_proc() {
             if (entry) {
                 for (auto& backend : backends) {
                     switch (entry->level) {
-                        case f8n::debug::level::verbose:
+                        case debug_level::verbose:
                             backend->verbose(entry->tag, entry->message);
                             break;
-                        case f8n::debug::level::info:
+                        case debug_level::info:
                             backend->info(entry->tag, entry->message);
                             break;
-                        case f8n::debug::level::warning:
+                        case debug_level::warning:
                             backend->warning(entry->tag, entry->message);
                             break;
-                        case f8n::debug::level::error:
+                        case debug_level::error:
                             backend->verbose(entry->tag, entry->message);
                             break;
                     }
@@ -167,6 +175,8 @@ void f8n::debug::start(std::vector<f8n::debug::IBackend*> backends) {
     cancel = false;
     queue = new log_queue();
     thread = new std::thread(std::bind(&thread_proc));
+
+    info("LOG SESSION", "---------- START ----------");
 }
 
 void debug::stop() {
@@ -185,7 +195,7 @@ void debug::stop() {
     }
 }
 
-static void enqueue(debug::level level, const std::string& tag, const std::string& string) {
+static void enqueue(debug_level level, const std::string& tag, const std::string& string) {
     std::unique_lock<std::recursive_mutex> lock(mutex);
 
     if (queue) {
@@ -194,24 +204,34 @@ static void enqueue(debug::level level, const std::string& tag, const std::strin
 }
 
 void debug::verbose(const std::string& tag, const std::string& string) {
-    enqueue(debug::level::verbose, tag, string);
+    enqueue(debug_level::verbose, tag, string);
 }
 
 void debug::info(const std::string& tag, const std::string& string) {
-    enqueue(debug::level::info, tag, string);
+    enqueue(debug_level::info, tag, string);
 }
 
 void debug::warning(const std::string& tag, const std::string& string) {
-    enqueue(debug::level::warning, tag, string);
+    enqueue(debug_level::warning, tag, string);
 }
 
 void debug::error(const std::string& tag, const std::string& string) {
-    enqueue(debug::level::error, tag, string);
+    enqueue(debug_level::error, tag, string);
 }
 
 ////////// FileBackend //////////
 
 namespace f8n {
+
+    static void writeTo(
+        std::ostream& out,
+        const std::string& level,
+        const std::string& tag,
+        const std::string& message)
+    {
+        out << "[" << level << "] [" << tag << "] " << message << "\n";
+        out.flush();
+    }
 
     debug::FileBackend::FileBackend(const std::string& fn)
     : out(fn.c_str()) {
@@ -223,25 +243,50 @@ namespace f8n {
     }
 
     debug::FileBackend::~FileBackend() {
-        if (this->out.is_open()) {
-            this->out.flush();
-        }
     }
 
     void debug::FileBackend::verbose(const std::string& tag, const std::string& string) {
-        this->out << "[verbose] [" << tag << "] " << string << "\n";
+        writeTo(this->out, "verbose", tag, string);
     }
 
     void debug::FileBackend::info(const std::string& tag, const std::string& string) {
-        this->out << "[info] [" << tag << "] " << string << "\n";
+        writeTo(this->out, "info", tag, string);
     }
 
     void debug::FileBackend::warning(const std::string& tag, const std::string& string) {
-        this->out << "[warning] [" << tag << "] " << string << "\n";
+        writeTo(this->out, "warning", tag, string);
     }
 
     void debug::FileBackend::error(const std::string& tag, const std::string& string) {
-        this->out << "[error] [" << tag << "] " << string << "\n";
+        writeTo(this->out, "error", tag, string);
+    }
+
+}
+
+////////// ConsoleBackend //////////
+
+namespace f8n {
+
+    debug::ConsoleBackend::ConsoleBackend() {
+    }
+
+    debug::ConsoleBackend::~ConsoleBackend() {
+    }
+
+    void debug::ConsoleBackend::verbose(const std::string& tag, const std::string& string) {
+        writeTo(std::cout, "verbose", tag, string);
+    }
+
+    void debug::ConsoleBackend::info(const std::string& tag, const std::string& string) {
+        writeTo(std::cout, "info", tag, string);
+    }
+
+    void debug::ConsoleBackend::warning(const std::string& tag, const std::string& string) {
+        writeTo(std::cout, "warning", tag, string);
+    }
+
+    void debug::ConsoleBackend::error(const std::string& tag, const std::string& string) {
+        writeTo(std::cerr, "error", tag, string);
     }
 
 }

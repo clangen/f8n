@@ -34,12 +34,17 @@
 
 #include <f8n/environment/Environment.h>
 #include <f8n/utf/conv.h>
+
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
 
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
+#include <boost/locale.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
 
 #ifdef WIN32
     #include <shellapi.h>
@@ -89,6 +94,13 @@ namespace f8n { namespace env {
     void Initialize(const std::string& appName, int sdkVersion) {
         f8n::env::appName = appName;
         f8n::env::sdkVersion = sdkVersion;
+
+        srand((unsigned int)time(0));
+
+        /* ensure boost::filesystem can handle UTF8 paths on WIndows */
+        std::locale locale = std::locale();
+        std::locale utf8Locale(locale, new boost::filesystem::detail::utf8_codecvt_facet);
+        boost::filesystem::path::imbue(utf8Locale);
     }
 
     int GetSdkVersion() {

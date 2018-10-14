@@ -41,6 +41,7 @@
 #include <condition_variable>
 #include <memory>
 #include <iostream>
+#include <time.h>
 
 using namespace f8n;
 
@@ -219,9 +220,19 @@ void debug::error(const std::string& tag, const std::string& string) {
     enqueue(debug_level::error, tag, string);
 }
 
-////////// FileBackend //////////
+////////// backend utils //////////
 
 namespace f8n {
+
+    static std::string timestamp() {
+        time_t rawtime = { 0 };
+        struct tm * timeinfo;
+        char buffer [64];
+        time(&rawtime);
+        timeinfo = localtime (&rawtime);
+        strftime (buffer, sizeof(buffer), "%T", timeinfo);
+        return std::string(buffer);
+    }
 
     static void writeTo(
         std::ostream& out,
@@ -229,9 +240,15 @@ namespace f8n {
         const std::string& tag,
         const std::string& message)
     {
-        out << "[" << level << "] [" << tag << "] " << message << "\n";
+        out << timestamp() << " [" << level << "] [" << tag << "] " << message << "\n";
         out.flush();
     }
+
+}
+
+////////// FileBackend //////////
+
+namespace f8n {
 
     debug::FileBackend::FileBackend(const std::string& fn)
     : out(fn.c_str()) {

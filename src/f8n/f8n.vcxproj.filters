@@ -90,6 +90,9 @@
     <ClInclude Include="db\Connection.h">
       <Filter>src\db</Filter>
     </ClInclude>
+    <ClInclude Include="f8n.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="runtime\MessageQueue.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="db\ScopedTransaction.cpp">
       <Filter>src\db</Filter>
+    </ClCompile>
+    <ClCompile Include="f8n.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

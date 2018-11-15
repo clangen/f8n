@@ -37,20 +37,4 @@
 #include <f8n/environment/Environment.h>
 
 namespace f8n {
-    void Startup(
-        const std::string& appName,
-        const int sdkVersion,
-        std::vector<f8n::debug::IBackend*> debugBackends)
-    {
-        f8n::debug::start(debugBackends);
-
-        f8n::env::Initialize(appName, sdkVersion);
-
-        f8n::i18n::Locale::Instance().Initialize(
-            f8n::env::GetApplicationDirectory() + "/locales");
-    }
-
-    void Shutdown() {
-        f8n::debug::stop();
-    }
 }

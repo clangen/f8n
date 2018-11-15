@@ -39,10 +39,4 @@
 #include <f8n/debug/debug.h>
 
 namespace f8n {
-    void Startup(
-        const std::string& appName,
-        const int sdkVersion,
-        std::vector<f8n::debug::IBackend*> debugBackends);
-
-    void Shutdown();
 }

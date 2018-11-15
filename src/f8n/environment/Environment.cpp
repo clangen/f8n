@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include <f8n/environment/Environment.h>
+#include <f8n/i18n/Locale.h>
 #include <f8n/utf/conv.h>
 
 #include <cstdlib>
@@ -101,6 +102,9 @@ namespace f8n { namespace env {
         std::locale locale = std::locale();
         std::locale utf8Locale(locale, new boost::filesystem::detail::utf8_codecvt_facet);
         boost::filesystem::path::imbue(utf8Locale);
+
+        f8n::i18n::Locale::Instance().Initialize(
+            f8n::env::GetApplicationDirectory() + "/locales");
     }
 
     int GetSdkVersion() {

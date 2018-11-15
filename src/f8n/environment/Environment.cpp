@@ -151,14 +151,14 @@ namespace f8n { namespace env {
             #else
                 std::string pathToProc = boost::str(boost::format("/proc/%d/exe") % (int) getpid());
                 readlink(pathToProc.c_str(), pathbuf, PATH_MAX);
-	    #endif
+	        #endif
 
             result.assign(pathbuf);
             size_t last = result.find_last_of("/");
             result = result.substr(0, last); /* remove filename component */
         #endif
 
-        return result;
+        return result + "/";
     }
 
     std::string GetHomeDirectory() {

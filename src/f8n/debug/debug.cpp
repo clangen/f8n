@@ -162,7 +162,7 @@ static void thread_proc() {
     }
 }
 
-void f8n::debug::start(std::vector<f8n::debug::IBackend*> backends) {
+void f8n::debug::Start(std::vector<f8n::debug::IBackend*> backends) {
     std::unique_lock<std::recursive_mutex> lock(mutex);
 
     if (queue || thread) {
@@ -180,7 +180,7 @@ void f8n::debug::start(std::vector<f8n::debug::IBackend*> backends) {
     info("LOG SESSION", "---------- START ----------");
 }
 
-void debug::stop() {
+void debug::Stop() {
     std::unique_lock<std::recursive_mutex> lock(mutex);
 
     cancel = true;
@@ -208,7 +208,15 @@ void debug::verbose(const std::string& tag, const std::string& string) {
     enqueue(debug_level::verbose, tag, string);
 }
 
+void debug::v(const std::string& tag, const std::string& string) {
+    enqueue(debug_level::verbose, tag, string);
+}
+
 void debug::info(const std::string& tag, const std::string& string) {
+    enqueue(debug_level::info, tag, string);
+}
+
+void debug::i(const std::string& tag, const std::string& string) {
     enqueue(debug_level::info, tag, string);
 }
 
@@ -216,7 +224,15 @@ void debug::warning(const std::string& tag, const std::string& string) {
     enqueue(debug_level::warning, tag, string);
 }
 
+void debug::w(const std::string& tag, const std::string& string) {
+    enqueue(debug_level::warning, tag, string);
+}
+
 void debug::error(const std::string& tag, const std::string& string) {
+    enqueue(debug_level::error, tag, string);
+}
+
+void debug::e(const std::string& tag, const std::string& string) {
     enqueue(debug_level::error, tag, string);
 }
 

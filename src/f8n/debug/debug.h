@@ -40,45 +40,58 @@
 
 namespace f8n {
     class debug {
-    public:
-        class IBackend {
-            public:
-                virtual ~IBackend() { }
-                virtual void verbose(const std::string& tag, const std::string& string) = 0;
-                virtual void info(const std::string& tag, const std::string& string) = 0;
-                virtual void warning(const std::string& tag, const std::string& string) = 0;
-                virtual void error(const std::string& tag, const std::string& string) = 0;
-        };
+        public:
+            class IBackend {
+                public:
+                    virtual ~IBackend() { }
+                    virtual void verbose(const std::string& tag, const std::string& string) = 0;
+                    virtual void info(const std::string& tag, const std::string& string) = 0;
+                    virtual void warning(const std::string& tag, const std::string& string) = 0;
+                    virtual void error(const std::string& tag, const std::string& string) = 0;
+            };
 
-        class FileBackend : public IBackend {
-            public:
-                FileBackend(const std::string& fn);
-                FileBackend(FileBackend&& fn);
-                virtual ~FileBackend() override;
-                virtual void verbose(const std::string& tag, const std::string& string) override;
-                virtual void info(const std::string& tag, const std::string& string) override;
-                virtual void warning(const std::string& tag, const std::string& string) override;
-                virtual void error(const std::string& tag, const std::string& string) override;
-            private:
-                std::ofstream out;
-        };
+            class FileBackend : public IBackend {
+                public:
+                    FileBackend(const std::string& fn);
+                    FileBackend(FileBackend&& fn);
+                    virtual ~FileBackend() override;
+                    virtual void verbose(const std::string& tag, const std::string& string) override;
+                    virtual void info(const std::string& tag, const std::string& string) override;
+                    virtual void warning(const std::string& tag, const std::string& string) override;
+                    virtual void error(const std::string& tag, const std::string& string) override;
+                private:
+                    std::ofstream out;
+            };
 
-        class ConsoleBackend : public IBackend {
-            public:
-                ConsoleBackend();
-                virtual ~ConsoleBackend() override;
-                virtual void verbose(const std::string& tag, const std::string& string) override;
-                virtual void info(const std::string& tag, const std::string& string) override;
-                virtual void warning(const std::string& tag, const std::string& string) override;
-                virtual void error(const std::string& tag, const std::string& string) override;
-        };
+            class ConsoleBackend : public IBackend {
+                public:
+                    ConsoleBackend();
+                    virtual ~ConsoleBackend() override;
+                    virtual void verbose(const std::string& tag, const std::string& string) override;
+                    virtual void info(const std::string& tag, const std::string& string) override;
+                    virtual void warning(const std::string& tag, const std::string& string) override;
+                    virtual void error(const std::string& tag, const std::string& string) override;
+            };
 
-        static void start(std::vector<IBackend*> backends);
-        static void stop();
+            static void Start(std::vector<IBackend*> backends);
+            static void Stop();
 
-        static void verbose(const std::string& tag, const std::string& string);
-        static void info(const std::string& tag, const std::string& string);
-        static void warning(const std::string& tag, const std::string& string);
-        static void error(const std::string& tag, const std::string& string);
+            template<typename... Args>
+            static std::string format(const std::string& format, Args ... args) {
+                /* https://stackoverflow.com/a/26221725 */
+                size_t size = std::snprintf(nullptr, 0, format.c_str(), args ...) + 1; /* extra space for '\0' */
+                std::unique_ptr<char[]> buf(new char[size]);
+                std::snprintf(buf.get(), size, format.c_str(), args ...);
+                return std::string(buf.get(), buf.get() + size - 1); /* omit the '\0' */
+            }
+
+            static void verbose(const std::string& tag, const std::string& string);
+            static void v(const std::string& tag, const std::string& string);
+            static void info(const std::string& tag, const std::string& string);
+            static void i(const std::string& tag, const std::string& string);
+            static void warning(const std::string& tag, const std::string& string);
+            static void w(const std::string& tag, const std::string& string);
+            static void error(const std::string& tag, const std::string& string);
+            static void e(const std::string& tag, const std::string& string);
     };
 }

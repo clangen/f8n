@@ -37,6 +37,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <memory>
 
 namespace f8n {
     class debug {

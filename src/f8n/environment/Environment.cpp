@@ -76,7 +76,7 @@ static std::string getDataDirectoryRoot() {
     directory.assign(u16to8(buffer));
     delete[] buffer;
 #else
-    directory = std::string(std::getenv("HOME"));
+    directory = std::string(std::getenv("HOME")) + "/.config/";
 #endif
 
     return directory;
@@ -178,13 +178,7 @@ namespace f8n { namespace env {
     }
 
     std::string GetDataDirectory(bool create) {
-        std::string directory =
-
-#ifdef WIN32
-        getDataDirectoryRoot() + "/" + appName + "/";
-    #else
-        getDataDirectoryRoot() + "/." + appName + "/";
-    #endif
+        std::string directory = getDataDirectoryRoot() + "/" + appName + "/";
 
         if (create) {
             boost::filesystem::path path(directory);

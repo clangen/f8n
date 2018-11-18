@@ -90,7 +90,20 @@ namespace f8n { namespace prefs {
             virtual void SetDouble(const std::string& key, double value);
             virtual void SetString(const std::string& key, const char* value);
 
-            void GetKeys(std::vector<std::string>& target);
+            /* shorthand */
+            bool Get(const std::string& key, bool defaultValue) { return GetBool(key, defaultValue); }
+            int Get(const std::string& key, int defaultValue) { return GetInt(key, defaultValue); }
+            int Get(const std::string& key, double defaultValue) { return GetDouble(key, defaultValue); }
+            std::string Get(const std::string& key, const char* defaultValue) { return GetString(key, defaultValue); }
+            std::string Get(const std::string& key, const std::string& defaultValue) { return GetString(key, defaultValue); }
+
+            void Set(const std::string& key, bool value) { SetBool(key, value); }
+            void Set(const std::string& key, int value) { SetInt(key, value); }
+            void Set(const std::string& key, double value) { SetDouble(key, value); }
+            void Set(const std::string& key, const char* value) { SetString(key, value); }
+            void Set(const std::string& key, const std::string& value) { SetString(key, value.c_str()); }
+
+            std::vector<std::string> GetKeys();
 
         private:
             Preferences(const std::string& component, Mode mode);

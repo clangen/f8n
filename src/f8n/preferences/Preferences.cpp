@@ -242,11 +242,13 @@ void Preferences::SetString(const std::string& key, const char* value) {
     json[key] = value;
 }
 
-void Preferences::GetKeys(std::vector<std::string>& target) {
+std::vector<std::string> Preferences::GetKeys() {
+    std::vector<std::string> target;
     auto it = json.begin();
     for (; it != json.end(); it++) {
         target.push_back(it.key());
     }
+    return target;
 }
 
 void Preferences::Load() {

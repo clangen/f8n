@@ -93,7 +93,7 @@ namespace f8n { namespace prefs {
             /* shorthand */
             bool Get(const std::string& key, bool defaultValue) { return GetBool(key, defaultValue); }
             int Get(const std::string& key, int defaultValue) { return GetInt(key, defaultValue); }
-            int Get(const std::string& key, double defaultValue) { return GetDouble(key, defaultValue); }
+            double Get(const std::string& key, double defaultValue) { return GetDouble(key, defaultValue); }
             std::string Get(const std::string& key, const char* defaultValue) { return GetString(key, defaultValue); }
             std::string Get(const std::string& key, const std::string& defaultValue) { return GetString(key, defaultValue); }
 

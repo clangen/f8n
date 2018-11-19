@@ -95,6 +95,9 @@ namespace f8n { namespace sdk {
     template <typename T = ISchema>
     class TSchema: public ISchema {
         public:
+            TSchema() {
+            }
+
             virtual ~TSchema() {
                 for (auto it : this->entries) {
                     switch (it->type) {

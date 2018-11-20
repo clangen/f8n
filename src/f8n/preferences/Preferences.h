@@ -103,7 +103,15 @@ namespace f8n { namespace prefs {
             void Set(const std::string& key, const char* value) { SetString(key, value); }
             void Set(const std::string& key, const std::string& value) { SetString(key, value.c_str()); }
 
+            /* defaults */
+            void SetDefault(const std::string& key, bool value);
+            void SetDefault(const std::string& key, int value);
+            void SetDefault(const std::string& key, double value);
+            void SetDefault(const std::string& key, const char* value);
+            void SetDefault(const std::string& key, const std::string& value);
+
             std::vector<std::string> GetKeys();
+            bool Contains(const std::string& key);
 
         private:
             Preferences(const std::string& component, Mode mode);

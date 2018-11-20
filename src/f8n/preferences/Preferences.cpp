@@ -307,3 +307,30 @@ void Preferences::SetDouble(const char* key, double value) {
 void Preferences::SetString(const char* key, const char* value) {
     this->SetString(std::string(key), value);
 }
+
+#define SET_IF_NOT_CONTAINS(k, v) if (!this->Contains(k)) this->Set(k, v);
+
+void Preferences::SetDefault(const std::string& key, bool value) {
+    SET_IF_NOT_CONTAINS(key, value)
+}
+
+void Preferences::SetDefault(const std::string& key, int value) {
+    SET_IF_NOT_CONTAINS(key, value)
+}
+
+void Preferences::SetDefault(const std::string& key, double value) {
+    SET_IF_NOT_CONTAINS(key, value)
+}
+
+void Preferences::SetDefault(const std::string& key, const char* value) {
+    SET_IF_NOT_CONTAINS(key, value)
+}
+
+void Preferences::SetDefault(const std::string& key, const std::string& value) {
+    SET_IF_NOT_CONTAINS(key, value)
+}
+
+bool Preferences::Contains(const std::string& key) {
+    std::unique_lock<std::mutex> lock(this->mutex);
+    return json.find(key) != json.end();
+}

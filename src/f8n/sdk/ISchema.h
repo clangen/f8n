@@ -135,7 +135,10 @@ namespace f8n { namespace sdk {
                 return entries[index];
             }
 
-            TSchema& AddBool(const std::string& name, bool defaultValue) {
+            TSchema& AddBool(
+                const std::string& name,
+                bool defaultValue = false)
+            {
                 auto entry = new BoolEntry();
                 entry->entry.type = ISchema::Type::Bool;
                 entry->entry.name = AllocString(name);
@@ -146,7 +149,7 @@ namespace f8n { namespace sdk {
 
             TSchema& AddInt(
                 const std::string& name,
-                int defaultValue,
+                int defaultValue = 0,
                 int min = INT_MIN,
                 int max = INT_MAX)
             {
@@ -162,7 +165,7 @@ namespace f8n { namespace sdk {
 
             TSchema& AddDouble(
                 const std::string& name,
-                double defaultValue,
+                double defaultValue = 0.0,
                 int precision = 2,
                 double min = DBL_MIN,
                 double max = DBL_MAX)
@@ -178,7 +181,10 @@ namespace f8n { namespace sdk {
                 return *this;
             }
 
-            TSchema& AddString(const std::string& name, const std::string& defaultValue) {
+            TSchema& AddString(
+                const std::string& name,
+                const std::string& defaultValue = "")
+            {
                 auto entry = new StringEntry();
                 entry->entry.type = ISchema::Type::String;
                 entry->entry.name = AllocString(name);

@@ -99,9 +99,7 @@ namespace f8n { namespace env {
         srand((unsigned int)time(0));
 
         /* ensure boost::filesystem can handle UTF8 paths on WIndows */
-        std::locale locale = std::locale();
-        std::locale utf8Locale(locale, new boost::filesystem::detail::utf8_codecvt_facet);
-        boost::filesystem::path::imbue(utf8Locale);
+        boost::filesystem::path::imbue(Utf8Locale());
 
         f8n::i18n::Locale::Instance().Initialize(
             f8n::env::GetApplicationDirectory() + "/locales");
@@ -109,6 +107,12 @@ namespace f8n { namespace env {
 
     int GetSdkVersion() {
         return sdkVersion;
+    }
+
+    std::locale Utf8Locale() {
+        std::locale locale = std::locale();
+        std::locale utf8Locale(locale, new boost::filesystem::detail::utf8_codecvt_facet);
+        return locale;
     }
 
     std::shared_ptr<Preferences> GetDefaultPreferences() {

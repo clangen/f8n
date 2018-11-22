@@ -35,6 +35,7 @@
 #pragma once
 
 #include <string>
+#include <locale>
 #include <f8n/config.h>
 #include <f8n/preferences/Preferences.h>
 
@@ -52,6 +53,8 @@ namespace f8n { namespace env {
     std::string GetPath(const std::string &sFile);
     std::string GetPluginDirectory();
     std::string NormalizeDir(std::string path);
+
+    std::locale Utf8Locale();
 
     void OpenFile(const std::string& path);
     bool CopyFile(const std::string& from, const std::string& to);

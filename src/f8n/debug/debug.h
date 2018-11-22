@@ -77,15 +77,6 @@ namespace f8n {
             static void Start(std::vector<IBackend*> backends);
             static void Stop();
 
-            template<typename... Args>
-            static std::string format(const std::string& format, Args ... args) {
-                /* https://stackoverflow.com/a/26221725 */
-                size_t size = std::snprintf(nullptr, 0, format.c_str(), args ...) + 1; /* extra space for '\0' */
-                std::unique_ptr<char[]> buf(new char[size]);
-                std::snprintf(buf.get(), size, format.c_str(), args ...);
-                return std::string(buf.get(), buf.get() + size - 1); /* omit the '\0' */
-            }
-
             static void verbose(const std::string& tag, const std::string& string);
             static void v(const std::string& tag, const std::string& string);
             static void info(const std::string& tag, const std::string& string);

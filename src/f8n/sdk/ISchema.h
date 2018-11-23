@@ -90,6 +90,7 @@ namespace f8n { namespace sdk {
             virtual void Release() = 0;
             virtual size_t Count() = 0;
             virtual const Entry* At(size_t index) = 0;
+            virtual const Entry* FindByName(const char* name) = 0;
     };
 
     template <typename T = ISchema>
@@ -133,6 +134,17 @@ namespace f8n { namespace sdk {
 
             virtual const Entry* At(size_t index) override {
                 return entries[index];
+            }
+
+            virtual const Entry* FindByName(const char* name) override {
+                if (name) {
+                    for (auto e : entries) {
+                        if (strcmp(name, e->name) == 0) {
+                            return e;
+                        }
+                    }
+                }
+                return nullptr;
             }
 
             TSchema& AddBool(

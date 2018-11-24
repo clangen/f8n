@@ -249,7 +249,7 @@ namespace f8n { namespace sdk {
                             auto e = (EnumEntry*) entry;
                             std::vector<std::string> items;
                             for (size_t j = 0; j < e->count; j++) {
-                                items.push_back(std::string(e->values[i]));
+                                items.push_back(std::string(e->values[j]));
                             }
                             this->AddEnum(e->entry.name, std::move(items), e->defaultValue);
                             break;

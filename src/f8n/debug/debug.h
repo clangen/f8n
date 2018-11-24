@@ -64,6 +64,13 @@ namespace f8n {
                     std::ofstream out;
             };
 
+            class SimpleFileBackend: public FileBackend {
+                public:
+                    SimpleFileBackend();
+                    SimpleFileBackend(const std::string& fn) = delete;
+                    SimpleFileBackend(FileBackend&& fn) = delete;
+            };
+
             class ConsoleBackend : public IBackend {
                 public:
                     ConsoleBackend();
@@ -74,7 +81,7 @@ namespace f8n {
                     virtual void error(const std::string& tag, const std::string& string) override;
             };
 
-            static void Start(std::vector<IBackend*> backends);
+            static void Start(std::vector<IBackend*> backends = { new SimpleFileBackend() });
             static void Stop();
 
             static void verbose(const std::string& tag, const std::string& string);

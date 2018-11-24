@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include <f8n/debug/debug.h>
+#include <f8n/environment/Environment.h>
 #include <functional>
 #include <string>
 #include <queue>
@@ -292,6 +293,16 @@ namespace f8n {
 
     void debug::FileBackend::error(const std::string& tag, const std::string& string) {
         writeTo(this->out, "error", tag, string);
+    }
+
+}
+
+////////// SimpleFileBackend //////////
+
+namespace f8n {
+
+    debug::SimpleFileBackend::SimpleFileBackend()
+    : FileBackend(env::GetDataDirectory() + "log.txt") {
     }
 
 }

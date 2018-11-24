@@ -220,6 +220,45 @@ namespace f8n { namespace sdk {
                 return *this;
             }
 
+            TSchema& Add(ISchema* schema) {
+                for (size_t i = 0; i < schema->Count(); i++) {
+                    auto entry = schema->At(i);
+                    switch (entry->type) {
+                        case Type::Bool: {
+                            auto b = (BoolEntry*) entry;
+                            this->AddBool(b->entry.name, b->defaultValue);
+                            break;
+                        }
+                        case Type::Int: {
+                            auto i = (IntEntry*) entry;
+                            this->AddInt(i->entry.name, i->defaultValue, i->minValue, i->maxValue);
+                            break;
+                        }
+                        case Type::Double: {
+                            auto d = (DoubleEntry*) entry;
+                            this->AddDouble(d->entry.name, d->defaultValue, d->precision,
+                                d->minValue, d->maxValue);
+                            break;
+                        }
+                        case Type::String: {
+                            auto s = (StringEntry*) entry;
+                            this->AddString(s->entry.name, s->defaultValue);
+                            break;
+                        }
+                        case Type::Enum: {
+                            auto e = (EnumEntry*) entry;
+                            std::vector<std::string> items;
+                            for (size_t j = 0; j < e->count; j++) {
+                                items.push_back(std::string(e->values[i]));
+                            }
+                            this->AddEnum(e->entry.name, std::move(items), e->defaultValue);
+                            break;
+                        }
+                    }
+                }
+                return *this;
+            }
+
         private:
             const char** AllocStringList(const std::vector<std::string>& values) {
                 const char** result = new const char*[values.size()];

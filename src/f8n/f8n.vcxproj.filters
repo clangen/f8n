@@ -93,6 +93,12 @@
     <ClInclude Include="f8n.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="sdk\ISchema.h">
+      <Filter>src\sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="utf\str.h">
+      <Filter>src\utf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="runtime\MessageQueue.cpp">

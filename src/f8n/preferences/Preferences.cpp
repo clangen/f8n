@@ -35,12 +35,14 @@
 #include <f8n/preferences/Preferences.h>
 #include <f8n/environment/Environment.h>
 #include <f8n/plugins/Plugins.h>
-#include <f8n/utf/conv.h>
+#include <f8n/str/utf.h>
+#include <f8n/str/util.h>
 #include <f8n/environment/Environment.h>
 #include <boost/format.hpp>
 #include <unordered_map>
 
 using nlohmann::json;
+using namespace f8n;
 using namespace f8n::prefs;
 using namespace f8n::plugin;
 using namespace f8n::utf;
@@ -289,7 +291,7 @@ double Preferences::GetDouble(const char* key, double defaultValue) {
 
 int Preferences::GetString(const char* key, char* dst, size_t size, const char* defaultValue) {
     std::string value = this->GetString(std::string(key), defaultValue);
-    return CopyString(value, dst, size);
+    return str::copy(value, dst, size);
 }
 
 void Preferences::SetBool(const char* key, bool value) {

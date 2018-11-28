@@ -5,6 +5,8 @@
 #include <functional>
 #include <cctype>
 #include <locale>
+#include <sstream>
+#include <iomanip>
 
 namespace f8n { namespace str {
 
@@ -46,6 +48,47 @@ namespace f8n { namespace str {
         }
         result.push_back(std::move(trim(in.substr(last))));
         return result;
+    }
+
+    static std::string join(
+        const std::vector<std::string>& items, const std::string& separator)
+    {
+        std::string result;
+        bool first = true;
+        for (auto& s : items) {
+            result += s;
+            if (first) {
+                result += separator;
+                first = false;
+            }
+        }
+        return result;
+    }
+
+    static inline void replace(
+        std::string& input, const std::string& find, const std::string& replace)
+    {
+        size_t pos = input.find(find);
+        while (pos != std::string::npos) {
+            input.replace(pos, find.size(), replace);
+            pos = input.find(find, pos + replace.size());
+        }
+    }
+
+    static inline size_t copy(const std::string& src, char* dst, size_t size) {
+        size_t len = src.size() + 1; /* space for the null terminator */
+        if (dst) {
+            size_t copied = src.copy(dst, size - 1);
+            dst[copied] = '\0';
+            return copied + 1;
+        }
+        return len;
+    }
+
+    static std::string make(const double value, const int precision = 2) {
+        std::ostringstream out;
+        out << std::fixed << std::setprecision(precision) << value;
+        return out.str();
     }
 
 } }

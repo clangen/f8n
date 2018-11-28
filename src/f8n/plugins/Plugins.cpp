@@ -37,7 +37,7 @@
 #include <f8n/sdk/IPlugin.h>
 #include <f8n/debug/debug.h>
 #include <f8n/environment/Environment.h>
-#include <f8n/utf/conv.h>
+#include <f8n/str/utf.h>
 #include <iostream>
 #include <boost/filesystem.hpp>
 

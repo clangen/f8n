@@ -62,7 +62,4 @@ namespace f8n { namespace env {
 
     int64_t Checksum(char *data,unsigned int bytes);
 
-    size_t CopyString(const std::string& src, char* dst, size_t size);
-    void ReplaceAll(std::string& input, const std::string& find, const std::string& replace);
-
 } }

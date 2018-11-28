@@ -34,7 +34,7 @@
 
 #include <f8n/environment/Environment.h>
 #include <f8n/i18n/Locale.h>
-#include <f8n/utf/conv.h>
+#include <f8n/str/utf.h>
 
 #include <cstdlib>
 #include <iostream>
@@ -230,16 +230,6 @@ namespace f8n { namespace env {
         return sum;
     }
 
-    size_t CopyString(const std::string& src, char* dst, size_t size) {
-        size_t len = src.size() + 1; /* space for the null terminator */
-        if (dst) {
-            size_t copied = src.copy(dst, size - 1);
-            dst[copied] = '\0';
-            return copied + 1;
-        }
-        return len;
-    }
-
     bool FileToByteArray(const std::string& path, char** target, int& size, bool nullTerminate) {
     #ifdef WIN32
         std::wstring u16fn = u8to16(path);
@@ -298,14 +288,6 @@ namespace f8n { namespace env {
         }
 
         return path;
-    }
-
-    void ReplaceAll(std::string& input, const std::string& find, const std::string& replace) {
-        size_t pos = input.find(find);
-        while (pos != std::string::npos) {
-            input.replace(pos, find.size(), replace);
-            pos = input.find(find, pos + replace.size());
-        }
     }
 
     void OpenFile(const std::string& path) {

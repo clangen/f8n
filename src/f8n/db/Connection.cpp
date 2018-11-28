@@ -33,7 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include <f8n/db/Connection.h>
-#include <f8n/utf/conv.h>
+#include <f8n/str/utf.h>
 #include <sqlite/sqlite3.h>
 
 using namespace f8n::db;

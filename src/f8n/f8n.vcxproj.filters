@@ -39,7 +39,7 @@
     <ClInclude Include="config.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="utf\conv.h">
+    <ClInclude Include="utf\utf.h">
       <Filter>src\utf</Filter>
     </ClInclude>
     <ClInclude Include="runtime\Message.h">

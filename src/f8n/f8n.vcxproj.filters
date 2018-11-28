@@ -4,9 +4,6 @@
     <Filter Include="src">
       <UniqueIdentifier>{82e3d5f7-47ef-4847-b3fb-284b1a8deadc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\utf">
-      <UniqueIdentifier>{58e36cc8-cf10-4043-8fe2-db33986f1ac5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\i18n">
       <UniqueIdentifier>{51548ff8-c93d-4d0d-87da-dc2a7b3a8230}</UniqueIdentifier>
     </Filter>
@@ -34,13 +31,13 @@
     <Filter Include="src\net">
       <UniqueIdentifier>{665b33fe-3795-4118-8e0e-0b02b8ef119d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\str">
+      <UniqueIdentifier>{58e36cc8-cf10-4043-8fe2-db33986f1ac5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="utf\utf.h">
-      <Filter>src\utf</Filter>
     </ClInclude>
     <ClInclude Include="runtime\Message.h">
       <Filter>src\runtime</Filter>
@@ -96,8 +93,11 @@
     <ClInclude Include="sdk\ISchema.h">
       <Filter>src\sdk</Filter>
     </ClInclude>
-    <ClInclude Include="utf\str.h">
-      <Filter>src\utf</Filter>
+    <ClInclude Include="str\utf.h">
+      <Filter>src\str</Filter>
+    </ClInclude>
+    <ClInclude Include="str\util.h">
+      <Filter>src\str</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

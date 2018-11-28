@@ -116,8 +116,8 @@
     <ClInclude Include="sdk\IPlugin.h" />
     <ClInclude Include="sdk\IPreferences.h" />
     <ClInclude Include="sdk\ISchema.h" />
-    <ClInclude Include="utf\utf.h" />
-    <ClInclude Include="utf\str.h" />
+    <ClInclude Include="str\utf.h" />
+    <ClInclude Include="str\util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db\Connection.cpp" />

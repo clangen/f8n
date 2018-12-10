@@ -1,14 +1,17 @@
 # f8n
-foundational code i find myself rewriting over and over in every new project i create.
+really boring, basic foundational code i find myself rewriting every time i start a new project.
 
-the half-baked design goal for this repo is to maintain a small set of simple, usable (and in most cases dumb) abstractions that c++ doesn't provide out of the box. things include:
+the half-baked goal for this repo is to maintain a small set of simple, usable (and in most cases dumb) functions, interfaces and abstractions that c++ doesn't provide out of the box.
+
+it includes things like:
   - a simple, re-usable event loop
   - an easy to use http client
+  - basic string manipulation utilities
   - wrappers around low-level sqlite functionality
   - dynamically loadable plugins
   - preference handling
   - debugging
-  - a lightweight set of unicode handling functionality to reduce boilerplate in utf16 windows apps and console-based programs.
+  - unicode stuff to reduce boilerplate in console-based programs and win32 apps.
 
 on Windows it provides pre-configured versions of:
   - sqlite

@@ -103,6 +103,7 @@
     <ClInclude Include="db\Statement.h" />
     <ClInclude Include="debug\debug.h" />
     <ClInclude Include="environment\Environment.h" />
+    <ClInclude Include="environment\Filesystem.h" />
     <ClInclude Include="f8n.h" />
     <ClInclude Include="i18n\Locale.h" />
     <ClInclude Include="net\HttpClient.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="db\Statement.cpp" />
     <ClCompile Include="debug\debug.cpp" />
     <ClCompile Include="environment\Environment.cpp" />
+    <ClCompile Include="environment\Filesystem.cpp" />
     <ClCompile Include="f8n.cpp" />
     <ClCompile Include="i18n\Locale.cpp" />
     <ClCompile Include="plugins\Plugins.cpp" />

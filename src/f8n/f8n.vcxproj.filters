@@ -99,6 +99,9 @@
     <ClInclude Include="str\util.h">
       <Filter>src\str</Filter>
     </ClInclude>
+    <ClInclude Include="environment\Filesystem.h">
+      <Filter>src\environment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="runtime\MessageQueue.cpp">
@@ -133,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="f8n.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="environment\Filesystem.cpp">
+      <Filter>src\environment</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

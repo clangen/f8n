@@ -32,7 +32,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include "Filesystem.h"
+#include <f8n/environment/Filesystem.h>
+#include <f8n/str/utf.h>
+
 #include <stdexcept>
 #include <cstdio>
 #include <algorithm>
@@ -40,6 +42,7 @@
 
 #ifdef WIN32
 #include <Windows.h>
+#include <Shlobj.h>
 #include <io.h>
 #define R_OK 0
 #else
@@ -49,12 +52,14 @@
 #include <sys/stat.h>
 #endif
 
+using namespace f8n::utf;
+
 namespace f8n { namespace env { namespace fs {
 
     bool DeleteFile(const std::string& path) {
 #ifdef WIN32
         std::wstring path16 = u8to16(path.c_str());
-        return DeleteFile(path16.c_str()) == TRUE;
+        return ::DeleteFile(path16.c_str()) == TRUE;
 #else
         return std::remove(path.c_str()) == 0;
 #endif
@@ -147,12 +152,12 @@ namespace f8n { namespace env { namespace fs {
             }
             std::string relPath8 = u16to8(findData.cFileName);
             std::string fullPath8 = path + "\\" + relPath8;
-            else if (findData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY) {
+            if (findData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY) {
                 if (recursive && relPath8 != "." && relPath8 != "..") {
                     findFilesWithExtensions(fullPath8 + "\\", exts, target, recursive);
                 }
             }
-            else if (matchesExtension(fullPath8)) {
+            else if (matchesExtension(fullPath8, exts)) {
                 target.push_back(Canonicalize(fullPath8));
             }
         }
@@ -202,7 +207,7 @@ namespace f8n { namespace env { namespace fs {
     bool IsFile(const std::string& path) {
 #ifdef WIN32
         auto path16 = u8to16(path.c_str());
-        /* CAL TODO */
+        return Exists(path) && !IsDirectory(path);
 #else
         struct stat s;
         return stat(path.c_str(), &s) == 0 && (s.st_mode & S_IFREG);
@@ -221,7 +226,7 @@ namespace f8n { namespace env { namespace fs {
 
     bool Exists(const std::string& path) {
 #ifdef WIN32
-        auto path16 = u8to16(fn.c_str());
+        auto path16 = u8to16(path.c_str());
         return _waccess(path16.c_str(), R_OK) != -1;
 #else
         return access(path.c_str(), R_OK) != -1;

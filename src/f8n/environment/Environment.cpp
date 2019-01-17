@@ -46,6 +46,7 @@
     #include <shellapi.h>
 #elif __APPLE__
     #include <mach-o/dyld.h>
+    #include <unistd.h>
 #else
     #include <sys/types.h>
     #include <unistd.h>

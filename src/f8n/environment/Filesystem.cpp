@@ -153,7 +153,7 @@ namespace f8n { namespace env { namespace fs {
                 }
             }
             else if (matchesExtension(fullPath8)) {
-                target.push_back(fullPath8);
+                target.push_back(Canonicalize(fullPath8));
             }
         }
 
@@ -179,7 +179,7 @@ namespace f8n { namespace env { namespace fs {
             else {
                 std::string fn = entry->d_name;
                 if (matchesExtension(fn, exts)) {
-                    std::string fullFn = path + "/" + fn;
+                    std::string fullFn = Canonicalize(path + "/" + fn);
                     target.push_back(fullFn);
                 }
             }
@@ -228,9 +228,9 @@ namespace f8n { namespace env { namespace fs {
 #endif
     }
 
-    std::string GetFilename(const std::string& path) {
+    std::string Filename(const std::string& path) {
         if (!IsFile(path)) {
-            throw std::runtime_error("invalid file passed to fs::GetFilename");
+            throw std::runtime_error("invalid file passed to fs::Filename");
         }
         auto sep = PathSeparator();
         size_t lastSlash = path.rfind(sep);
@@ -242,9 +242,9 @@ namespace f8n { namespace env { namespace fs {
         return "";
     }
 
-    std::string GetExtension(const std::string& path) {
+    std::string Extension(const std::string& path) {
         if (!IsFile(path)) {
-            throw std::runtime_error("invalid file passed to fs::GetExtension");
+            throw std::runtime_error("invalid file passed to fs::Extension");
         }
         auto sep = PathSeparator();
         size_t lastSlash = path.rfind(sep);

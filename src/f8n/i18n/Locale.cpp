@@ -82,7 +82,7 @@ void Locale::Initialize(const std::string& localePath) {
 
     if (fs::Exists(localePath)) {
         for (auto fn : fs::FindFilesWithExtensions(localePath, { "json" }, false)) {
-            fn = fn.substr(0, fn.rfind("."));
+            fn = fs::Filename(fn);
             this->locales.push_back(fn);
         }
     }

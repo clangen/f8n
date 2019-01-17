@@ -56,7 +56,7 @@ namespace f8n { namespace env { namespace fs {
     bool IsDirectory(const std::string& path);
     bool Exists(const std::string& path);
 
-    std::string GetFilename(const std::string& path);
-    std::string GetExtension(const std::string& path);
+    std::string Filename(const std::string& path);
+    std::string Extension(const std::string& path);
 
 } } }

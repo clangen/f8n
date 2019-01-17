@@ -99,7 +99,7 @@ void Plugins::LoadPlugins() {
         for (auto filename : fs::FindFilesWithExtensions(pluginDir, { "dll", "dylib", "so" }, false)) {
             std::shared_ptr<Descriptor> descriptor(new Descriptor());
             descriptor->filename = filename;
-            descriptor->key = fs::GetFilename(filename);
+            descriptor->key = fs::Filename(filename);
 
 #ifdef WIN32
             /* if the file ends with ".dll", we'll try to load it*/

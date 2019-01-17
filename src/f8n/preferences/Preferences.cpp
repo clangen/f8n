@@ -38,7 +38,6 @@
 #include <f8n/str/utf.h>
 #include <f8n/str/util.h>
 #include <f8n/environment/Environment.h>
-#include <boost/format.hpp>
 #include <unordered_map>
 
 using nlohmann::json;
@@ -53,7 +52,7 @@ static std::unordered_map<std::string, std::shared_ptr<Preferences> > pluginCach
 static std::mutex cacheMutex;
 
 #define CACHE_KEY(name, mode) \
-    boost::str(boost::format("%s-%s") % name % mode)
+    f8n::str::format("%s-%d", name.c_str(), (int) mode)
 
 #define FILENAME(x) f8n::env::GetDataDirectory() + "/" + x + ".json"
 

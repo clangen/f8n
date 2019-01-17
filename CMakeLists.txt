@@ -33,6 +33,7 @@ set (F8N_SRCS
   ./src/f8n/plugins/Plugins.cpp
   ./src/f8n/preferences/Preferences.cpp
   ./src/f8n/environment/Environment.cpp
+  ./src/f8n/environment/Filesystem.cpp
 )
 
 add_library(f8n STATIC ${F8N_SRCS})

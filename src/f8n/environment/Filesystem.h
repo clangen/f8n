@@ -35,28 +35,28 @@
 #pragma once
 
 #include <string>
-#include <locale>
-#include <f8n/config.h>
-#include <f8n/preferences/Preferences.h>
+#include <vector>
 
-namespace f8n { namespace env {
+namespace f8n { namespace env { namespace fs {
 
-    void Initialize(const std::string& appName, int sdkVersion);
+    bool DeleteFile(const std::string& path);
 
-    int GetSdkVersion();
+    bool CreateDirectory(const std::string& path);
 
-    std::shared_ptr<f8n::prefs::Preferences> GetDefaultPreferences();
+    std::string PathSeparator();
 
-    std::string GetHomeDirectory();
-    std::string GetApplicationDirectory();
-    std::string GetDataDirectory(bool create = true);
-    std::string GetPath(const std::string &sFile);
-    std::string GetPluginDirectory();
+    std::string Canonicalize(const std::string& path);
 
-    void OpenFile(const std::string& path);
-    bool CopyFile(const std::string& from, const std::string& to);
-    bool FileToByteArray(const std::string& path, char** target, int& size, bool nullTerminate = false);
+    std::vector<std::string> FindFilesWithExtensions(
+        const std::string& path,
+        const std::vector<std::string>&& exts,
+        bool recursive = true);
 
-    int64_t Checksum(char *data,unsigned int bytes);
+    bool IsFile(const std::string& path);
+    bool IsDirectory(const std::string& path);
+    bool Exists(const std::string& path);
 
-} }
+    std::string GetFilename(const std::string& path);
+    std::string GetExtension(const std::string& path);
+
+} } }

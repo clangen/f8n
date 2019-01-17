@@ -33,19 +33,14 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include <f8n/environment/Environment.h>
+#include <f8n/environment/Filesystem.h>
 #include <f8n/i18n/Locale.h>
 #include <f8n/str/utf.h>
+#include <f8n/str/util.h>
 
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
-
-#include <boost/filesystem.hpp>
-#include <boost/format.hpp>
-#include <boost/locale.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
 
 #ifdef WIN32
     #include <shellapi.h>
@@ -65,6 +60,7 @@
 
 using namespace f8n::utf;
 using namespace f8n::prefs;
+using namespace f8n::env;
 
 static std::string getDataDirectoryRoot() {
     std::string directory;
@@ -82,11 +78,6 @@ static std::string getDataDirectoryRoot() {
     return directory;
 }
 
-static inline void silentDelete(const std::string fn) {
-    boost::system::error_code ec;
-    boost::filesystem::remove(boost::filesystem::path(fn), ec);
-}
-
 namespace f8n { namespace env {
     static const std::string DEFAULT_PREFERENCES = "default";
     static std::string appName = "defaultAppName";
@@ -98,21 +89,12 @@ namespace f8n { namespace env {
 
         srand((unsigned int)time(0));
 
-        /* ensure boost::filesystem can handle UTF8 paths on WIndows */
-        boost::filesystem::path::imbue(Utf8Locale());
-
         f8n::i18n::Locale::Instance().Initialize(
             f8n::env::GetApplicationDirectory() + "/locales");
     }
 
     int GetSdkVersion() {
         return sdkVersion;
-    }
-
-    std::locale Utf8Locale() {
-        std::locale locale = std::locale();
-        std::locale utf8Locale(locale, new boost::filesystem::detail::utf8_codecvt_facet);
-        return locale;
     }
 
     std::shared_ptr<Preferences> GetDefaultPreferences() {
@@ -153,7 +135,7 @@ namespace f8n { namespace env {
                 size_t bufsize = sizeof(pathbuf);
                 sysctl(mib, 4, pathbuf, &bufsize, nullptr, 0);
             #else
-                std::string pathToProc = boost::str(boost::format("/proc/%d/exe") % (int) getpid());
+                std::string pathToProc = str::format("/proc/%d/exe", (int) getpid());
                 readlink(pathToProc.c_str(), pathbuf, PATH_MAX);
 	        #endif
 
@@ -185,10 +167,7 @@ namespace f8n { namespace env {
         std::string directory = getDataDirectoryRoot() + "/" + appName + "/";
 
         if (create) {
-            boost::filesystem::path path(directory);
-            if (!boost::filesystem::exists(path)) {
-                boost::filesystem::create_directories(path);
-            }
+            fs::CreateDirectory(directory);
         }
 
         return directory;
@@ -277,17 +256,6 @@ namespace f8n { namespace env {
         }
 
         return success;
-    }
-
-    std::string NormalizeDir(std::string path) {
-        path = boost::filesystem::path(path).make_preferred().string();
-
-        std::string sep(1, boost::filesystem::path::preferred_separator);
-        if (path.size() && path.substr(path.size() - 1, 1) != sep) {
-            path += sep;
-        }
-
-        return path;
     }
 
     void OpenFile(const std::string& path) {

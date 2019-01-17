@@ -34,8 +34,8 @@
 
 #include <f8n/i18n/Locale.h>
 #include <f8n/environment/Environment.h>
+#include <f8n/environment/Filesystem.h>
 #include <f8n/preferences/Preferences.h>
-#include <boost/filesystem.hpp>
 
 #define KEY_STRINGS "strings"
 #define KEY_DIMENSIONS "dimensions"
@@ -45,7 +45,6 @@
 using namespace f8n::i18n;
 using namespace f8n::env;
 using namespace f8n::prefs;
-using namespace boost::filesystem;
 
 static nlohmann::json empty;
 
@@ -81,18 +80,10 @@ void Locale::Initialize(const std::string& localePath) {
     this->locales.clear();
     this->localePath = localePath;
 
-    path locales(localePath);
-
-    if (exists(locales)) {
-        directory_iterator end;
-        for (directory_iterator file(locales); file != end; file++) {
-            const path& p = file->path();
-
-            if (p.has_extension() && p.extension().string() == ".json") {
-                std::string fn = p.filename().string();
-                fn = fn.substr(0, fn.rfind("."));
-                this->locales.push_back(fn);
-            }
+    if (fs::Exists(localePath)) {
+        for (auto fn : fs::FindFilesWithExtensions(localePath, { "json" }, false)) {
+            fn = fn.substr(0, fn.rfind("."));
+            this->locales.push_back(fn);
         }
     }
 

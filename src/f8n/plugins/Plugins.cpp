@@ -37,9 +37,9 @@
 #include <f8n/sdk/IPlugin.h>
 #include <f8n/debug/debug.h>
 #include <f8n/environment/Environment.h>
+#include <f8n/environment/Filesystem.h>
 #include <f8n/str/utf.h>
 #include <iostream>
-#include <boost/filesystem.hpp>
 
 static const std::string TAG = "Plugins";
 static const std::string PLUGINS_PREFERENCE = "PluginFactoryConfig";
@@ -94,92 +94,86 @@ void Plugins::LoadPlugins() {
 #endif
 
     std::string pluginDir(GetPluginDirectory());
-    boost::filesystem::path dir(pluginDir);
 
     try {
-        boost::filesystem::directory_iterator end;
-        for (boost::filesystem::directory_iterator file(dir); file != end; file++) {
-            if (boost::filesystem::is_regular(file->status())){
-                std::string filename(file->path().string());
-
-                std::shared_ptr<Descriptor> descriptor(new Descriptor());
-                descriptor->filename = filename;
-                descriptor->key = boost::filesystem::path(filename).filename().string();
+        for (auto filename : fs::FindFilesWithExtensions(pluginDir, { "dll", "dylib", "so" }, false)) {
+            std::shared_ptr<Descriptor> descriptor(new Descriptor());
+            descriptor->filename = filename;
+            descriptor->key = fs::GetFilename(filename);
 
 #ifdef WIN32
-                /* if the file ends with ".dll", we'll try to load it*/
-                if (filename.substr(filename.size() - 4) == ".dll") {
-                    HMODULE dll = LoadLibrary(u8to16(filename).c_str());
-                    if (dll != NULL) {
-                        /* every plugin has a "GetPlugin" method. */
-                        CallGetPlugin getPluginCall = (CallGetPlugin) GetProcAddress(dll, "GetPlugin");
+            /* if the file ends with ".dll", we'll try to load it*/
+            if (filename.substr(filename.size() - 4) == ".dll") {
+                HMODULE dll = LoadLibrary(u8to16(filename).c_str());
+                if (dll != NULL) {
+                    /* every plugin has a "GetPlugin" method. */
+                    CallGetPlugin getPluginCall = (CallGetPlugin) GetProcAddress(dll, "GetPlugin");
 
-                        if (getPluginCall) {
-                            /* exists? check the version, and add it! */
-                            auto plugin = getPluginCall();
-                            if (plugin->SdkVersion() == f8n::env::GetSdkVersion()) {
-                                descriptor->plugin = plugin;
-                                descriptor->nativeHandle = dll;
-                                this->plugins.push_back(descriptor);
-                            }
-                            else {
-                                FreeLibrary(dll);
-                            }
+                    if (getPluginCall) {
+                        /* exists? check the version, and add it! */
+                        auto plugin = getPluginCall();
+                        if (plugin->SdkVersion() == f8n::env::GetSdkVersion()) {
+                            descriptor->plugin = plugin;
+                            descriptor->nativeHandle = dll;
+                            this->plugins.push_back(descriptor);
                         }
                         else {
-                            /* otherwise, free nad move on */
                             FreeLibrary(dll);
                         }
                     }
-                }
-#else
-    #ifdef __APPLE__
-                if (filename.substr(filename.size() - 6) == ".dylib") {
-                    int openFlags = RTLD_LOCAL;
-    #else
-                if (filename.substr(filename.size() - 3) == ".so") {
-                    int openFlags = RTLD_NOW;
-    #endif
-                    void* dll = NULL;
-
-                    try {
-                        dll = dlopen(filename.c_str(), openFlags);
-                    }
-                    catch (...) {
-                        f8n::debug::error(TAG, "exception while loading plugin " + filename);
-                        continue;
-                    }
-
-                    if (!dll) {
-                        char *err = dlerror();
-                        f8n::debug::error(
-                            TAG,
-                            "could not load shared library " + filename +
-                            " error: " + std::string(err));
-                    }
                     else {
-                        CallGetPlugin getPluginCall;
-                        *(void **)(&getPluginCall) = dlsym(dll, "GetPlugin");
+                        /* otherwise, free nad move on */
+                        FreeLibrary(dll);
+                    }
+                }
+            }
+#else
+#ifdef __APPLE__
+            if (filename.substr(filename.size() - 6) == ".dylib") {
+                int openFlags = RTLD_LOCAL;
+#else
+            if (filename.substr(filename.size() - 3) == ".so") {
+                int openFlags = RTLD_NOW;
+#endif
+                void* dll = NULL;
 
-                        if (getPluginCall) {
-                            auto plugin = getPluginCall();
-                            if (plugin->SdkVersion() == f8n::env::GetSdkVersion()) {
-                                f8n::debug::info(TAG, "loaded: " + filename);
-                                descriptor->plugin = getPluginCall();
-                                descriptor->nativeHandle = dll;
-                                this->plugins.push_back(descriptor);
-                            }
-                            else {
-                                dlclose(dll);
-                            }
+                try {
+                    dll = dlopen(filename.c_str(), openFlags);
+                }
+                catch (...) {
+                    f8n::debug::error(TAG, "exception while loading plugin " + filename);
+                    continue;
+                }
+
+                if (!dll) {
+                    char *err = dlerror();
+                    f8n::debug::error(
+                        TAG,
+                        "could not load shared library " + filename +
+                        " error: " + std::string(err));
+                }
+                else {
+                    CallGetPlugin getPluginCall;
+                    *(void **)(&getPluginCall) = dlsym(dll, "GetPlugin");
+
+                    if (getPluginCall) {
+                        auto plugin = getPluginCall();
+                        if (plugin->SdkVersion() == f8n::env::GetSdkVersion()) {
+                            f8n::debug::info(TAG, "loaded: " + filename);
+                            descriptor->plugin = getPluginCall();
+                            descriptor->nativeHandle = dll;
+                            this->plugins.push_back(descriptor);
                         }
                         else {
                             dlclose(dll);
                         }
                     }
+                    else {
+                        dlclose(dll);
+                    }
                 }
-#endif
             }
+#endif
         }
     }
     catch(...) {

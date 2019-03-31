@@ -1772,6 +1772,7 @@ PDCEX  unsigned long PDC_get_input_fd(void);
 PDCEX  unsigned long PDC_get_key_modifiers(void);
 PDCEX  int     PDC_return_key_modifiers(bool);
 PDCEX  int     PDC_save_key_modifiers(bool);
+PDCEX  int     PDC_resize_screen(int, int);
 PDCEX  void    PDC_set_resize_limits( const int new_min_lines,
                                const int new_max_lines,
                                const int new_min_cols,

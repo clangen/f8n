@@ -24,6 +24,8 @@ bld/
 bin/Debug/f8n.lib
 **/__build
 **/__output
+**/__output32
+**/__output64
 
 # CMake
 CMakeCache.txt

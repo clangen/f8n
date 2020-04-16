@@ -168,60 +168,56 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\addch.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\addchstr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\addstr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\attr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\beep.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\bkgd.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\border.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\clear.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\color.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\debug.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\delch.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\deleteln.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\getch.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\getstr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\getyx.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\inch.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\inchstr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\initscr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\inopts.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\insch.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\insstr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\instr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\kernel.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\keyname.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\mouse.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\move.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\outopts.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\overlay.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\pad.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\panel.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\pdcwincon.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\pdcwingui.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\printw.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\refresh.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\scanw.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\scroll.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\scr_dump.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\slk.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\termattr.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\touch.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\util.c" />
-    <ClCompile Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\window.c" />
     <ClCompile Include="src\base64\base64.cpp" />
     <ClCompile Include="src\sqlite\sqlite3.c">
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level1</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Level1</WarningLevel>
     </ClCompile>
     <ClCompile Include="src\wcwidth.c" />
+    <ClCompile Include="win32_src\pdcurses\addch.c" />
+    <ClCompile Include="win32_src\pdcurses\addchstr.c" />
+    <ClCompile Include="win32_src\pdcurses\addstr.c" />
+    <ClCompile Include="win32_src\pdcurses\attr.c" />
+    <ClCompile Include="win32_src\pdcurses\beep.c" />
+    <ClCompile Include="win32_src\pdcurses\bkgd.c" />
+    <ClCompile Include="win32_src\pdcurses\border.c" />
+    <ClCompile Include="win32_src\pdcurses\clear.c" />
+    <ClCompile Include="win32_src\pdcurses\color.c" />
+    <ClCompile Include="win32_src\pdcurses\debug.c" />
+    <ClCompile Include="win32_src\pdcurses\delch.c" />
+    <ClCompile Include="win32_src\pdcurses\deleteln.c" />
+    <ClCompile Include="win32_src\pdcurses\getch.c" />
+    <ClCompile Include="win32_src\pdcurses\getstr.c" />
+    <ClCompile Include="win32_src\pdcurses\getyx.c" />
+    <ClCompile Include="win32_src\pdcurses\inch.c" />
+    <ClCompile Include="win32_src\pdcurses\inchstr.c" />
+    <ClCompile Include="win32_src\pdcurses\initscr.c" />
+    <ClCompile Include="win32_src\pdcurses\inopts.c" />
+    <ClCompile Include="win32_src\pdcurses\insch.c" />
+    <ClCompile Include="win32_src\pdcurses\insstr.c" />
+    <ClCompile Include="win32_src\pdcurses\instr.c" />
+    <ClCompile Include="win32_src\pdcurses\kernel.c" />
+    <ClCompile Include="win32_src\pdcurses\keyname.c" />
+    <ClCompile Include="win32_src\pdcurses\mouse.c" />
+    <ClCompile Include="win32_src\pdcurses\move.c" />
+    <ClCompile Include="win32_src\pdcurses\outopts.c" />
+    <ClCompile Include="win32_src\pdcurses\overlay.c" />
+    <ClCompile Include="win32_src\pdcurses\pad.c" />
+    <ClCompile Include="win32_src\pdcurses\panel.c" />
+    <ClCompile Include="win32_src\pdcurses\pdcwincon.c" />
+    <ClCompile Include="win32_src\pdcurses\pdcwingui.c" />
+    <ClCompile Include="win32_src\pdcurses\printw.c" />
+    <ClCompile Include="win32_src\pdcurses\refresh.c" />
+    <ClCompile Include="win32_src\pdcurses\scanw.c" />
+    <ClCompile Include="win32_src\pdcurses\scroll.c" />
+    <ClCompile Include="win32_src\pdcurses\scr_dump.c" />
+    <ClCompile Include="win32_src\pdcurses\slk.c" />
+    <ClCompile Include="win32_src\pdcurses\termattr.c" />
+    <ClCompile Include="win32_src\pdcurses\touch.c" />
+    <ClCompile Include="win32_src\pdcurses\util.c" />
+    <ClCompile Include="win32_src\pdcurses\window.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\acs_defs.h" />
-    <ClInclude Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\font437.h" />
-    <ClInclude Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\iconbmp.h" />
-    <ClInclude Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\pdccolor.h" />
     <ClInclude Include="include\base64\base64.h" />
     <ClInclude Include="include\sigslot\sigslot.h" />
     <ClInclude Include="include\sqlite\sqlite3.h" />
@@ -308,9 +304,10 @@
     <ClInclude Include="win32_include\openssl\x509v3.h" />
     <ClInclude Include="win32_include\openssl\x509_vfy.h" />
     <ClInclude Include="win32_include\panel.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\musikcube\src\3rdparty\win32_src\pdcurses\README.md" />
+    <ClInclude Include="win32_src\pdcurses\acs_defs.h" />
+    <ClInclude Include="win32_src\pdcurses\font437.h" />
+    <ClInclude Include="win32_src\pdcurses\iconbmp.h" />
+    <ClInclude Include="win32_src\pdcurses\pdccolor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

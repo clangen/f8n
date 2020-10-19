@@ -36,6 +36,7 @@
 
 #include <f8n/config.h>
 #include <map>
+#include <string>
 
 struct sqlite3_stmt;
 

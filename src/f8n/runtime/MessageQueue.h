@@ -54,6 +54,8 @@ namespace f8n { namespace runtime {
             virtual int Remove(IMessageTarget *target, int type = -1);
             virtual bool Contains(IMessageTarget *target, int type = -1);
             virtual void Debounce(IMessagePtr message, int64_t delayMs = 0);
+            virtual void Register(IMessageTarget* target);
+            virtual void Unregister(IMessageTarget* target);
             virtual void RegisterForBroadcasts(IMessageTargetPtr target);
             virtual void UnregisterForBroadcasts(IMessageTarget *target);
             virtual void WaitAndDispatch(int64_t timeoutMillis = -1);
@@ -63,6 +65,8 @@ namespace f8n { namespace runtime {
             int64_t GetNextMessageTime() {
                 return nextMessageTime.load();
             }
+
+            void Enqueue(IMessagePtr message, int64_t delayMs);
 
         private:
             typedef std::weak_ptr<IMessageTarget> IWeakMessageTarget;
@@ -83,6 +87,7 @@ namespace f8n { namespace runtime {
             std::list<EnqueuedMessage*> queue;
             std::list<EnqueuedMessage*> dispatch;
             std::set<IWeakMessageTarget, WeakPtrLess> receivers;
+            std::set<IMessageTarget*> targets;
             std::condition_variable_any waitForDispatch;
             std::atomic<int64_t> nextMessageTime;
 

@@ -25,16 +25,11 @@ namespace f8n { namespace str {
         return out;
     }
 
-    static inline std::string trim(const std::string& str) {
-        std::string s(str);
-
-        s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-            std::not1(std::ptr_fun<int, int>(std::isspace))));
-
-        s.erase(std::find_if(s.rbegin(), s.rend(),
-            std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
-
-        return s;
+    static inline std::string trim(const std::string& s) {
+        /* so lazy https://stackoverflow.com/a/17976541 */
+        auto front = std::find_if_not(s.begin(), s.end(), isspace);
+        auto back = std::find_if_not(s.rbegin(), s.rend(), isspace).base();
+        return (back <= front ? std::string() : std::string(front, back));
     }
 
     static std::vector<std::string> split(

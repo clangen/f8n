@@ -50,6 +50,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <limits.h>
 #endif
 
 using namespace f8n::utf;
@@ -87,7 +88,7 @@ namespace f8n { namespace env { namespace fs {
         }
         return result8;
 #else
-        char realname[_POSIX_PATH_MAX];
+        char realname[PATH_MAX];
         if (realpath(path.c_str(), realname) == 0) {
             return "";
         }

@@ -7,6 +7,7 @@
 #include <locale>
 #include <sstream>
 #include <iomanip>
+#include <memory>
 
 namespace f8n { namespace str {
 

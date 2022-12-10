@@ -1,3 +1,11 @@
+/* PDCurses */
+
+/* Palette management code used by VT,  WinGUI,  SDL1/2,  and X11 for
+'full color' (24-bit).  It may eventually be used by DOSVGA,  WinCon,
+and/or the Plan9 platform,  all of which have full color capability.
+It will presumably never be useful for the DOS or OS/2 platforms.
+See 'pdccolor.txt' for a rationale of how this works. */
+
 #ifdef NO_STDINT_H
    #define uint64_t unsigned long long
    #define uint32_t unsigned long
@@ -11,7 +19,7 @@
 #define PACKED_RGB uint32_t
 
 #ifndef PACK_RGB
-   #define PACK_RGB( red, green, blue) ((red) | ((green)<<8) | ((blue) << 16))
+   #define PACK_RGB( red, green, blue) ((red) | ((green)<<8) | ((PACKED_RGB)(blue) << 16))
 #endif
 
 #include <curspriv.h>
@@ -29,11 +37,16 @@ PACKED_RGB PDC_default_color( int idx)
     assert( idx >= 0);
     if( idx < 16)
     {
-        const int intensity = ((idx & 8) ? 0xff : 0xc0);
+        if( idx == 8)
+            rval = PACK_RGB( 0x80, 0x80, 0x80);
+        else
+        {
+            const int intensity = ((idx & 8) ? 0xff : 0xc0);
 
-        rval = PACK_RGB( ((idx & COLOR_RED) ? intensity : 0),
-                          ((idx & COLOR_GREEN) ? intensity : 0),
-                          ((idx & COLOR_BLUE) ? intensity : 0));
+            rval = PACK_RGB( ((idx & COLOR_RED) ? intensity : 0),
+                             ((idx & COLOR_GREEN) ? intensity : 0),
+                             ((idx & COLOR_BLUE) ? intensity : 0));
+        }
     }
     else if( idx < 216 + 16)
     {                    /* colors 16-231 are a 6x6x6 color cube */
@@ -58,22 +71,8 @@ PACKED_RGB PDC_default_color( int idx)
     return( rval);
 }
 
-/* We initialize the palette to be an array of,  at most,  256 values.
-Few programs will go beyond that.  Of those that do,  most will use
-default values.  For those that actually do set palette entries beyond
-256 (currently,  only testcurs),  the array is reallocated.  */
-
 int PDC_init_palette( void)
 {
-    int i;
-
-    palette_size = (COLORS > 256 ? 256 : COLORS);
-    rgbs = (PACKED_RGB *)calloc( palette_size, sizeof( PACKED_RGB));
-    assert( rgbs);
-    if( !rgbs)
-        return( -1);
-    for( i = 0; i < palette_size; i++)
-        rgbs[i] = PDC_default_color( i);
     return( 0);
 }
 
@@ -88,10 +87,11 @@ PACKED_RGB PDC_get_palette_entry( const int idx)
 {
    PACKED_RGB rval;
 
-   if( !rgbs && PDC_init_palette( ))
-      rval = ( idx ? 0xffffff : 0);
-   else if( idx < palette_size)
+   if( idx < palette_size)
+   {
+      assert( idx >= 0);
       rval = rgbs[idx];
+   }
    else
       rval = PDC_default_color( idx);
    return( rval);
@@ -104,12 +104,13 @@ int PDC_set_palette_entry( const int idx, const PACKED_RGB rgb)
 {
    int rval, i;
 
-   if( !rgbs && PDC_init_palette( ))
-      return( -1);
    if( idx >= palette_size)
       {
       int new_size = palette_size;
+      const int initial_palette_size = 8;
 
+      if( !new_size)
+         new_size = initial_palette_size;
       while( new_size <= idx)
          new_size *= 2;
       rgbs = realloc( rgbs, new_size * sizeof( PACKED_RGB));
@@ -123,13 +124,6 @@ int PDC_set_palette_entry( const int idx, const PACKED_RGB rgb)
    rval = (rgbs[idx] == rgb ? 1 : 0);
    rgbs[idx] = rgb;
    return( rval);
-}
-
-static bool intensify_enabled = TRUE;
-
-PDCEX void PDC_set_color_intensify_enabled( bool enabled)
-{
-    intensify_enabled = enabled;
 }
 
     /* This function 'intensifies' a color by shifting it toward white. */
@@ -146,11 +140,6 @@ PDCEX void PDC_set_color_intensify_enabled( bool enabled)
 
 static PACKED_RGB intensified_color( PACKED_RGB ival)
 {
-    if ( !intensify_enabled)
-    {
-        return ival;
-    }
-
     int rgb, i;
     PACKED_RGB oval = 0;
 
@@ -192,20 +181,17 @@ void PDC_get_rgb_values( const chtype srcp,
     bool reverse_colors = ((srcp & A_REVERSE) ? TRUE : FALSE);
     bool intensify_backgnd = FALSE;
     bool default_foreground = FALSE, default_background = FALSE;
+    int foreground_index, background_index;
 
-    {
-        int foreground_index, background_index;
-
-        extended_pair_content( color, &foreground_index, &background_index);
-        if( foreground_index < 0 && SP->orig_attr)
-            default_foreground = TRUE;
-        else
-            *foreground_rgb = PDC_get_palette_entry( foreground_index);
-        if( background_index < 0 && SP->orig_attr)
-            default_background = TRUE;
-        else
-            *background_rgb = PDC_get_palette_entry( background_index);
-    }
+    extended_pair_content( color, &foreground_index, &background_index);
+    if( foreground_index < 0 && SP->orig_attr)
+        default_foreground = TRUE;
+    else
+        *foreground_rgb = PDC_get_palette_entry( foreground_index);
+    if( background_index < 0 && SP->orig_attr)
+        default_background = TRUE;
+    else
+        *background_rgb = PDC_get_palette_entry( background_index);
 
     if( srcp & A_BLINK)
     {
@@ -214,6 +200,22 @@ void PDC_get_rgb_values( const chtype srcp,
         else if( PDC_blink_state)
             reverse_colors ^= 1;
     }
+    if( default_foreground)
+        *foreground_rgb = (PACKED_RGB)-1;
+    else if( srcp & A_BOLD & ~SP->termattrs)
+        *foreground_rgb = intensified_color( *foreground_rgb);
+
+    if( default_background)
+        *background_rgb = (PACKED_RGB)-1;
+    else if( intensify_backgnd)
+        *background_rgb = intensified_color( *background_rgb);
+    if( srcp & A_DIM)
+    {
+        if( !default_foreground)
+           *foreground_rgb = dimmed_color( *foreground_rgb);
+        if( !default_background)
+           *background_rgb = dimmed_color( *background_rgb);
+    }
     if( reverse_colors)
     {
         const PACKED_RGB temp = *foreground_rgb;
@@ -221,18 +223,4 @@ void PDC_get_rgb_values( const chtype srcp,
         *foreground_rgb = *background_rgb;
         *background_rgb = temp;
     }
-
-    if( srcp & A_BOLD & ~SP->termattrs)
-        *foreground_rgb = intensified_color( *foreground_rgb);
-    if( intensify_backgnd)
-        *background_rgb = intensified_color( *background_rgb);
-    if( srcp & A_DIM)
-    {
-        *foreground_rgb = dimmed_color( *foreground_rgb);
-        *background_rgb = dimmed_color( *background_rgb);
-    }
-    if( default_foreground)
-        *foreground_rgb = (PACKED_RGB)-1;
-    if( default_background)
-        *background_rgb = (PACKED_RGB)-1;
 }

@@ -15,10 +15,10 @@ it includes things like:
 
 on Windows it provides pre-configured versions of:
   - sqlite
-  - libressl
+  - openssl
   - curl
   - zlib
-  - pdcurses
+  - PDCursesMod
   
 it also includes the following libraries for all platforms:
   - sigslot

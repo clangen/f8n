@@ -7,6 +7,8 @@
 #include <csignal>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <vector>
 
 using namespace f8n::runtime;
 
@@ -20,6 +22,7 @@ namespace f8n { namespace daemon {
         virtual std::string Version() = 0;
         virtual std::string Hash() = 0;
         virtual std::string LockFilename() = 0;
+        virtual std::vector<int> GetSignals() = 0;
 
         virtual void OnSignal(int signal) = 0;
         virtual void OnInit(Type type, f8n::runtime::MessageQueue& messageQueue) = 0;
@@ -266,7 +269,9 @@ namespace f8n { namespace daemon {
         internal::handleCommandLine(argc, argv);
         internal::exitIfRunning();
         internal::start();
-        std::signal(SIGUSR1, internal::signalHandler);
+        for (int signal : instance.GetSignals()) {
+            std::signal(signal, internal::signalHandler);
+        }
         {
             internal::EvMessageQueue messageQueue;
             instance.OnInit(internal::type, messageQueue);

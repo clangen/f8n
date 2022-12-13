@@ -4,6 +4,8 @@
 
 #include <f8n/runtime/MessageQueue.h>
 
+#include <unistd.h>
+
 #include <csignal>
 #include <iostream>
 #include <fstream>

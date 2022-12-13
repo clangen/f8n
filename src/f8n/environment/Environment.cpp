@@ -111,41 +111,56 @@ namespace f8n { namespace env {
     std::string GetApplicationDirectory() {
         std::string result;
 
-        #ifdef WIN32
-            wchar_t widePath[2048];
-            int length = GetModuleFileName(NULL, widePath, 2048);
-            if (length != 0 && length < 2048) {
-                result.assign(GetPath(u16to8(widePath).c_str()));
-            }
-        #elif __APPLE__
-            char pathbuf[PATH_MAX + 1];
-            uint32_t bufsize = sizeof(pathbuf);
-            _NSGetExecutablePath(pathbuf, &bufsize);
-            result.assign(pathbuf);
-            size_t last = result.find_last_of("/");
-            result = result.substr(0, last); /* remove filename component */
-        #else
-            char pathbuf[PATH_MAX + 1] = { 0 };
+#ifdef WIN32
+        wchar_t widePath[2048];
+        int length = GetModuleFileName(NULL, widePath, 2048);
+        if (length != 0 && length < 2048) {
+            result.assign(GetPath(f8n::utf::u16to8(widePath).c_str()));
+        }
+#elif __APPLE__
+        char pathbuf[PATH_MAX + 1];
+        uint32_t bufsize = sizeof(pathbuf);
+        _NSGetExecutablePath(pathbuf, &bufsize);
+        result.assign(pathbuf);
+        size_t last = result.find_last_of("/");
+        result = result.substr(0, last); /* remove filename component */
+#else
+        char pathbuf[PATH_MAX + 1] = { 0 };
 
-            #ifdef __FreeBSD__
-                int mib[4];
-                mib[0] = CTL_KERN;
-                mib[1] = KERN_PROC;
-                mib[2] = KERN_PROC_PATHNAME;
-                mib[3] = -1;
-                size_t bufsize = sizeof(pathbuf);
-                sysctl(mib, 4, pathbuf, &bufsize, nullptr, 0);
-            #else
-                std::string pathToProc = str::format("/proc/%d/exe", (int) getpid());
-                readlink(pathToProc.c_str(), pathbuf, PATH_MAX);
-	        #endif
+#ifdef __FreeBSD__
+        int mib[4];
+        mib[0] = CTL_KERN;
+        mib[1] = KERN_PROC;
+        mib[2] = KERN_PROC_PATHNAME;
+        mib[3] = -1;
+        size_t bufsize = sizeof(pathbuf);
+        sysctl(mib, 4, pathbuf, &bufsize, nullptr, 0);
+#elif defined  __OpenBSD__
+        int mib[4];
+        char** argv;
+        size_t len = ARG_MAX;
 
-            result.assign(pathbuf);
-            size_t last = result.find_last_of("/");
-            result = result.substr(0, last); /* remove filename component */
-        #endif
+        mib[0] = CTL_KERN;
+        mib[1] = KERN_PROC_ARGS;
+        mib[2] = getpid();
+        mib[3] = KERN_PROC_ARGV;
 
-        return result + "/";
+        argv = new char* [len];
+        if (sysctl(mib, 4, argv, &len, nullptr, 0) < 0) abort();
+
+        fs::path command = fs::absolute(fs::path(fs::u8path(argv[0])));
+        realpath(command.u8string().c_str(), pathbuf);
+        delete[] argv;
+#else
+        std::string pathToProc = f8n::str::format("/proc/%d/exe", (int)getpid());
+        readlink(pathToProc.c_str(), pathbuf, PATH_MAX);
+#endif
+        result.assign(pathbuf);
+        size_t last = result.find_last_of("/");
+        result = result.substr(0, last); /* remove filename component */
+#endif
+
+        return result;
     }
 
     std::string GetHomeDirectory() {

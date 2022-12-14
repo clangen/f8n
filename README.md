@@ -7,7 +7,7 @@ it includes things like:
   - a simple, re-usable event loop
   - an easy to use http client
   - basic string manipulation utilities
-  - daemon creation with automatic signal handling
+  - daemon creation with easy signal handling
   - wrappers around low-level sqlite functionality
   - dynamically loadable plugins
   - preference handling

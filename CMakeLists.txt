@@ -1,6 +1,3 @@
-#cmake -DCMAKE_BUILD_TYPE=Release .
-#cmake -DCMAKE_BUILD_TYPE=Debug .
-
 cmake_minimum_required(VERSION 3.1)
 
 project(f8n)
@@ -11,8 +8,6 @@ set (f8n_VERSION_MINOR 1)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fPIC -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fPIC -O2")
-
-set (LIBRARY_OUTPUT_PATH ${f8n_SOURCE_DIR}/__output)
 
 include_directories (
   "${f8n_SOURCE_DIR}/src/"
@@ -36,7 +31,7 @@ set (F8N_SRCS
   ./src/f8n/environment/Filesystem.cpp
 )
 
-add_library(f8n STATIC ${F8N_SRCS})
+add_library(f8n SHARED ${F8N_SRCS})
 
 target_link_libraries(f8n dl pthread)
 target_include_directories(f8n BEFORE PRIVATE ${VENDOR_INCLUDE_DIRECTORIES})

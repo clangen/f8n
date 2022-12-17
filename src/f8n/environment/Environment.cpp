@@ -122,6 +122,8 @@ namespace f8n { namespace env {
         uint32_t bufsize = sizeof(pathbuf);
         _NSGetExecutablePath(pathbuf, &bufsize);
         result.assign(pathbuf);
+        realpath(result.c_str(), pathbuf); /* follow symlink if necessary */
+        result.assign(pathbuf);
         size_t last = result.find_last_of("/");
         result = result.substr(0, last); /* remove filename component */
 #else

@@ -2,7 +2,6 @@
 
 #include "pdcwin.h"
 #include <tchar.h>
-#include <stdint.h>
 #include <assert.h>
 #include "pdccolor.h"
 #ifdef WIN32_LEAN_AND_MEAN
@@ -28,7 +27,7 @@ inlined functions.  Until we puzzle out which ones do and which
 don't,  we'll just leave "inlined" functions as plain old static
 functions.        */
 
-#ifdef _MSC_VER
+#if defined( _MSC_VER) || defined( __BORLANDC__)
 #define INLINE static
 #else
 #define INLINE static inline
@@ -150,6 +149,8 @@ void PDC_scr_close(void)
 void PDC_scr_free(void)
 {
     PDC_free_palette( );
+    DestroyWindow( PDC_hWnd);
+    ttytype[1] = 0;
 }
 
 int PDC_choose_a_new_font( void);                     /* pdcdisp.c */
@@ -985,7 +986,6 @@ INLINE int set_default_sizes_from_registry( const int n_cols, const int n_rows,
 static void adjust_font_size( const int font_size_change)
 {
     extern int PDC_font_size;
-    RECT client_rect;
 
     PDC_font_size += font_size_change;
     if( PDC_font_size < 2)
@@ -1002,6 +1002,8 @@ static void adjust_font_size( const int font_size_change)
           /* you disagree,  I have others.                    */
     if( IsZoomed( PDC_hWnd))
     {
+        RECT client_rect;
+
         GetClientRect(PDC_hWnd, &client_rect);
         PDC_n_rows = client_rect.bottom / PDC_cyChar;
         PDC_n_cols = client_rect.right / PDC_cxChar;
@@ -1071,8 +1073,9 @@ void PDC_set_resize_limits( const int new_min_lines, const int new_max_lines,
       /* one on each side.  Vertically,  we need two frame heights,  plus room */
       /* for the application title and the menu.  */
 
-static void adjust_window_size( int *xpixels, int *ypixels, DWORD window_style,
-                                     DWORD window_ex_style)
+static void adjust_window_size( int *xpixels, int *ypixels,
+                                     const DWORD window_style,
+                                     const DWORD window_ex_style)
 {
     RECT rect;
 
@@ -1195,11 +1198,26 @@ INLINE void HandleSizing( WPARAM wParam, LPARAM lParam )
         rect->left = rect->right - rounded_width;
 }
 
-typedef void(*resize_callback_fnptr)();
+typedef void(*resize_callback_fnptr)(void);
 static resize_callback_fnptr resize_callback = NULL;
 void PDC_set_window_resized_callback(resize_callback_fnptr callback) {
     resize_callback = callback;
 }
+
+/* Under Wine,  it appears that the code to force the window size to be
+an integral number of columns and rows doesn't work.  This is because
+WM_SIZING messages aren't sent.  This appeared to be fixed as of Wine
+1.7.18, and Wine-specific code was removed at that point.  The bug
+recrudesced in Wine 7.0.1.
+
+   Therefore,  _in Wine only_,  attempting to resize the window to be
+an exact number of rows/columns results in cascading resize attempts.
+So we check on initialization to see if we're in Wine;  if we are,
+resizes are skipped. */
+
+typedef const char *(CDECL *wine_version_func)(void);
+
+static wine_version_func wine_version;
 
 static void HandleSize( const WPARAM wParam, const LPARAM lParam)
 {
@@ -1214,6 +1232,11 @@ static void HandleSize( const WPARAM wParam, const LPARAM lParam)
     if ( wParam == SIZE_MINIMIZED )
     {
         prev_wParam = SIZE_MINIMIZED;
+        return;
+    }
+    if( wParam == (WPARAM)-99)
+    {
+        prev_wParam = (WPARAM)-99;
         return;
     }
 
@@ -1246,6 +1269,8 @@ static void HandleSize( const WPARAM wParam, const LPARAM lParam)
             }
         }
     }
+    else if( wine_version)
+        return;
 
     add_resize_key = 1;
     if( wParam == SIZE_RESTORED &&
@@ -1282,8 +1307,9 @@ struct BACK_BUFFER {
 
 static void PrepareBackBuffer(HDC hdc, RECT rect)
 {
-    int width = rect.right - rect.left;
-    int height = rect.bottom - rect.top;
+    const int width = rect.right - rect.left;
+    const int height = rect.bottom - rect.top;
+
     memset(&back_buffer, 0, sizeof(back_buffer));
     back_buffer.rect = rect;
     back_buffer.window_dc = hdc;
@@ -1294,17 +1320,15 @@ static void PrepareBackBuffer(HDC hdc, RECT rect)
     back_buffer.is_rect_valid = width > 0 && height > 0;
 }
 
-static void BlitBackBuffer()
+static void BlitBackBuffer( void)
 {
-    const RECT* r = NULL;
-    int width = 0;
-    int height = 0;
 
     if (back_buffer.is_rect_valid)
     {
-        r = &back_buffer.rect;
-        width = r->right - r->left;
-        height = r->bottom - r->top;
+        const RECT* r = &back_buffer.rect;
+        const int width = r->right - r->left;
+        const int height = r->bottom - r->top;
+
         BitBlt(
             back_buffer.window_dc,
             r->left, r->top,
@@ -1325,7 +1349,6 @@ static void HandlePaint( HWND hwnd )
     HDC window_dc, memory_dc;
     RECT client_rect;
     HBRUSH old_brush;
-    int i;
 
 /*  printf( "In HandlePaint: %ld %ld, %ld %ld\n",
                rect.left, rect.top, rect.right, rect.bottom); */
@@ -1335,21 +1358,22 @@ static void HandlePaint( HWND hwnd )
 
     PrepareBackBuffer(window_dc, client_rect);
     memory_dc = back_buffer.memory_dc;
-    {
-        /* paint the background black. */
-        old_brush = SelectObject(memory_dc, GetStockObject(BLACK_BRUSH));
-        Rectangle(memory_dc,
-            client_rect.left, client_rect.top,
-            client_rect.right, client_rect.bottom);
-        SelectObject(memory_dc, old_brush);
 
-        /* paint all the rows */
-        if (curscr && curscr->_y && PDC_n_cols > 0 && PDC_n_rows > 0)
-        {
-            for (i = 0; i < PDC_n_rows; i++)
-                if (i < SP->lines && curscr->_y[i])
-                    PDC_transform_line_given_hdc(memory_dc, i, 0, PDC_n_cols, curscr->_y[i]);
-        }
+    /* paint the background black. */
+    old_brush = SelectObject(memory_dc, GetStockObject(BLACK_BRUSH));
+    Rectangle(memory_dc,
+        client_rect.left, client_rect.top,
+        client_rect.right, client_rect.bottom);
+    SelectObject(memory_dc, old_brush);
+
+    /* paint all the rows */
+    if (curscr && curscr->_y && PDC_n_cols > 0 && PDC_n_rows > 0)
+    {
+        int i;
+
+        for (i = 0; i < PDC_n_rows; i++)
+            if (i < SP->lines && curscr->_y[i])
+                PDC_transform_line_given_hdc(memory_dc, i, 0, PDC_n_cols, curscr->_y[i]);
     }
     BlitBackBuffer();
     EndPaint(hwnd, &ps);
@@ -1739,7 +1763,7 @@ static LRESULT ALIGN_STACK CALLBACK WndProc (const HWND hwnd,
     static int xbutton_pressed = 0;
     static int modified_key_to_return = 0;
     static bool ignore_resize = FALSE;
-    int button = -1, action = -1;
+    int button, action;
 
     PDC_hWnd = hwnd;
     if( !hwnd)
@@ -1808,6 +1832,7 @@ static LRESULT ALIGN_STACK CALLBACK WndProc (const HWND hwnd,
         {
         const int mouse_x = LOWORD( lParam) / PDC_cxChar;
         const int mouse_y = HIWORD( lParam) / PDC_cyChar;
+
         if( add_mouse( 0, BUTTON_MOVED, mouse_x, mouse_y))
             modified_key_to_return = 0;
         }
@@ -1895,8 +1920,29 @@ static LRESULT ALIGN_STACK CALLBACK WndProc (const HWND hwnd,
         if( wParam == 3 && !SP->raw_inp)     /* Ctrl-C hit */
             exit( 0);
         if( wParam != 9 || !(GetKeyState( VK_SHIFT) & 0x8000))
-            if( !key_already_handled || last_key_handled != (int)wParam )
-               add_key_to_queue( (int)wParam );
+            if (!key_already_handled || last_key_handled != (int)wParam) {
+#if _UNICODE
+                /* if we are building against the unicode runtime, key messages
+                received by WM_CHAR will be UTF16 encoded; convert it to a
+                sequence UTF8 bytes and inject them one at a time.
+                see: https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-char */
+                wchar_t utf16[3]; /* may be a surrogate pair */
+                utf16[0] = LOWORD(wParam);
+                utf16[1] = HIWORD(wParam);
+                utf16[2] = 0;
+                unsigned char utf8[4 + 4 + 1];
+                int size = WideCharToMultiByte(CP_UTF8, 0, utf16, -1, 0, 0, 0, 0);
+                if (size > 0 && sizeof(utf8)) {
+                    utf8[0] = 0;
+                    WideCharToMultiByte(CP_UTF8, 0, utf16, -1, utf8, size, 0, 0);
+                    for (int i = 0; i < size - 1; i++) {
+                        add_key_to_queue((int) utf8[i]);
+                    }
+                }
+#else
+                add_key_to_queue((int)wParam);
+#endif
+            }
         key_already_handled = FALSE;
         last_key_handled = 0;
         return 0;
@@ -2062,7 +2108,6 @@ it's inlined. */
 INLINE int set_up_window( void)
 {
     /* create the dialog window  */
-    WNDCLASS   wndclass ;
     HMENU hMenu;
     HANDLE hInstance = GetModuleHandle( NULL);
     int n_default_columns = 80;
@@ -2087,6 +2132,7 @@ INLINE int set_up_window( void)
     if( !wndclass_has_been_registered)
     {
         ATOM rval;
+        WNDCLASS   wndclass ;
 
         wndclass.style         = CS_VREDRAW | CS_HREDRAW;
         wndclass.lpfnWndProc   = WndProc ;
@@ -2148,8 +2194,10 @@ INLINE int set_up_window( void)
         keep_size_within_bounds( &n_default_rows, &n_default_columns);
         xsize = PDC_cxChar * n_default_columns;
         ysize = PDC_cyChar * n_default_rows;
-        adjust_window_size( &xsize, &ysize, window_style, menu_shown);
+        adjust_window_size( &xsize, &ysize, window_style, window_ex_style);
     }
+
+    HandleSize( (WPARAM)-99, 0);
 
     PDC_hWnd = CreateWindowEx( window_ex_style,
                     AppName, WindowTitle,
@@ -2204,12 +2252,30 @@ INLINE int set_up_window( void)
 
 int PDC_scr_open(void)
 {
+    const HMODULE hntdll = GetModuleHandle( _T("ntdll.dll"));
+    const HMODULE shcoredll = GetModuleHandle(_T("Shcore.dll"));
+
     PDC_LOG(("PDC_scr_open() - called\n"));
+
+    if( hntdll)
+        wine_version = (wine_version_func)GetProcAddress(hntdll, "wine_get_version");
+
+    if (shcoredll) {
+        typedef HRESULT(__stdcall *set_process_dpi_awareness_t)(int);
+        static set_process_dpi_awareness_t set_process_dpi_awareness_func;
+        static int ADJUST_DPI_PER_MONITOR = 2;
+        set_process_dpi_awareness_func = (set_process_dpi_awareness_t)GetProcAddress(shcoredll, "SetProcessDpiAwareness");
+        if (set_process_dpi_awareness_func) {
+            set_process_dpi_awareness_func(ADJUST_DPI_PER_MONITOR);
+        }
+    }
+
     COLORS = N_COLORS;  /* should give this a try and see if it works! */
     if (!SP || PDC_init_palette( ))
         return ERR;
 
     debug_printf( "colors alloc\n");
+    PDC_bDone = FALSE;
     SP->mouse_wait = PDC_CLICK_PERIOD;
     SP->visibility = 0;                /* no cursor,  by default */
     SP->curscol = SP->cursrow = 0;
@@ -2352,8 +2418,4 @@ int PDC_init_color( int color, int red, int green, int blue)
 
     PDC_set_palette_entry( color, new_rgb);
     return OK;
-}
-
-void PDC_free_platform_dependent_memory( void)
-{
 }

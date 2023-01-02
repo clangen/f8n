@@ -18,7 +18,6 @@ initscr
     SCREEN *newterm(const char *type, FILE *outfd, FILE *infd);
     SCREEN *set_term(SCREEN *new);
     void delscreen(SCREEN *sp);
-    void PDC_free_memory_allocations( void);
 
     int resize_term(int nlines, int ncols);
     bool is_termresized(void);
@@ -51,15 +50,6 @@ initscr
    since it's not freed by endwin(). This function is usually not
    needed. In PDCurses, the parameter must be the value of SP, and
    delscreen() sets SP to NULL.
-
-   PDC_free_memory_allocations() frees all memory allocated by PDCurses,
-   including SP and any platform-dependent memory.  It should be called
-   after endwin(),  not instead of it.  It need not be called,  because
-   remaining memory will be freed at exit;  but it can help in diagnosing
-   memory leak issues by ruling out any from PDCurses.
-
-   Note that SDLn and X11 have known memory leaks within their libraries,
-   which appear to be effectively unfixable.
 
    set_term() does nothing meaningful in PDCurses, but is included for
    compatibility with other curses implementations.
@@ -166,7 +156,7 @@ WINDOW *initscr(void)
 
     if (SP && SP->alive)
         return NULL;
-    SP = calloc(1, sizeof(SCREEN));
+    SP = (SCREEN *)calloc(1, sizeof(SCREEN));
     assert( SP);
     if (!SP)
         return NULL;
@@ -202,6 +192,9 @@ WINDOW *initscr(void)
 
     LINES = SP->lines = PDC_get_rows();
     COLS = SP->cols = PDC_get_columns();
+
+    if( PDC_init_atrtab())   /* set up default colors */
+        return NULL;
 
     if (LINES < 2 || COLS < 2)
     {
@@ -268,8 +261,6 @@ WINDOW *initscr(void)
     else
         curscr->_clear = TRUE;
 
-    if( PDC_init_atrtab())   /* set up default colors */
-        return NULL;
 
     MOUSE_X_POS = MOUSE_Y_POS = -1;
     BUTTON_STATUS(1) = BUTTON_RELEASED;
@@ -283,13 +274,13 @@ WINDOW *initscr(void)
 
     longname( );
 
-    SP->c_buffer = malloc(_INBUFSIZ * sizeof(int));
+    SP->c_buffer = (int *)malloc(_INBUFSIZ * sizeof(int));
     if (!SP->c_buffer)
         return NULL;
     SP->c_pindex = 0;
     SP->c_gindex = 1;
 
-    SP->c_ungch = malloc(NUNGETCH * sizeof(int));
+    SP->c_ungch = (int *)malloc(NUNGETCH * sizeof(int));
     if (!SP->c_ungch)
         return NULL;
     SP->c_ungind = 0;
@@ -333,14 +324,6 @@ bool isendwin(void)
     return SP ? !(SP->alive) : FALSE;
 }
 
-void PDC_free_memory_allocations( void)
-{
-   PDC_free_platform_dependent_memory( );
-   PDC_clearclipboard( );
-   traceoff( );
-   delscreen( SP);
-}
-
 SCREEN *newterm(const char *type, FILE *outfd, FILE *infd)
 {
     PDC_LOG(("newterm() - called\n"));
@@ -351,35 +334,44 @@ SCREEN *newterm(const char *type, FILE *outfd, FILE *infd)
     return initscr() ? SP : NULL;
 }
 
-SCREEN *set_term(SCREEN *new)
+SCREEN *set_term(SCREEN *new_scr)
 {
     PDC_LOG(("set_term() - called\n"));
 
     /* We only support one screen */
 
-    return (new == SP) ? SP : NULL;
+    return (new_scr == SP) ? SP : NULL;
 }
-
-void PDC_free_pair_hash_table( void);        /* color.c */
 
 void delscreen(SCREEN *sp)
 {
+    int i = 0;
+    struct _opaque_screen_t *optr;
+
     PDC_LOG(("delscreen() - called\n"));
 
     assert( SP);
     if (!SP || sp != SP)
         return;
 
+    traceoff( );
     free(SP->c_ungch);
     free(SP->c_buffer);
-    free(SP->atrtab);
-    PDC_free_pair_hash_table();
 
     PDC_slk_free();     /* free the soft label keys, if needed */
 
-    delwin(stdscr);
-    delwin(curscr);
-    delwin(SP->lastscr);
+         /* Mark all windows as 'parentless'.  That way,  we can */
+         /* delete all windows associated with SP.               */
+    optr = SP->opaque;
+    for( i = 0; i < optr->n_windows; i++)
+        optr->window_list[i]->_parent = NULL;
+    while( optr->n_windows)
+        delwin( optr->window_list[0]);
+                    /* With all windows deleted,  the window  */
+                    /* list should be empty. */
+    assert( !optr->window_list);
+
+    PDC_free_atrtab( );
     stdscr = (WINDOW *)NULL;
     curscr = (WINDOW *)NULL;
     SP->lastscr = (WINDOW *)NULL;

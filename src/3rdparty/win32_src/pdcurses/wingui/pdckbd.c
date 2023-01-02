@@ -17,16 +17,17 @@ void PDC_set_keyboard_binary(bool on)
 extern int PDC_key_queue_low, PDC_key_queue_high;
 extern int PDC_key_queue[KEY_QUEUE_SIZE];
 
-/* PDCurses message/event callback */
-/* Calling PDC_napms for one millisecond ensures that the message loop */
-/* is called and messages in general,  and keyboard events in particular, */
-/* get processed.   */
-
 bool PDC_check_key(void)
 {
-    PDC_napms( 1);
+    static int count;
+
     if( PDC_key_queue_low != PDC_key_queue_high)
         return TRUE;
+    if( count++ == 100)
+    {
+        count = 0;
+        PDC_napms( 1);
+    }
     return FALSE;
 }
 

@@ -226,8 +226,8 @@ static LONG scale_font_for_current_dpi( LONG size)
 }
 
 int PDC_font_size = -1;
-TCHAR PDC_font_name[256] = _T("\0");
-TCHAR PDC_preferred_fontface[256] = _T("\0"); /* can be set by application */
+TCHAR PDC_font_name[128];
+TCHAR PDC_preferred_fontface[128]; /* can be set by application */
 static TCHAR* PDC_default_font_name = _T("Courier New");
 
 /* The calling application can override the default fontface with
@@ -282,6 +282,11 @@ static LOGFONT PDC_get_logical_font( const int font_idx)
     }
 
     LOGFONT lf;
+
+    if ( PDC_font_size < 0)
+    {
+        PDC_font_size = scale_font_for_current_dpi( 12); /* default 12 points */
+    }
 
     memset(&lf, 0, sizeof(LOGFONT));        /* Clear out structure. */
     lf.lfHeight = -PDC_font_size;
@@ -534,7 +539,6 @@ void PDC_transform_line_given_hdc( const HDC hdc, const int lineno,
                mbtowc( &z, &c, 1);
                ch = (chtype)z;
             }
-            assert( "We should never get here");
 #endif
             buff[olen] = (wchar_t)ch;
             lpDx[olen] = PDC_cxChar;

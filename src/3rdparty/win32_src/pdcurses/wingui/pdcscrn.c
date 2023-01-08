@@ -1921,27 +1921,7 @@ static LRESULT ALIGN_STACK CALLBACK WndProc (const HWND hwnd,
             exit( 0);
         if( wParam != 9 || !(GetKeyState( VK_SHIFT) & 0x8000))
             if (!key_already_handled || last_key_handled != (int)wParam) {
-#if _UNICODE
-                /* if we are building against the unicode runtime, key messages
-                received by WM_CHAR will be UTF16 encoded; convert it to a
-                sequence UTF8 bytes and inject them one at a time.
-                see: https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-char */
-                wchar_t utf16[3]; /* may be a surrogate pair */
-                utf16[0] = LOWORD(wParam);
-                utf16[1] = HIWORD(wParam);
-                utf16[2] = 0;
-                unsigned char utf8[4 + 4 + 1];
-                int size = WideCharToMultiByte(CP_UTF8, 0, utf16, -1, 0, 0, 0, 0);
-                if (size > 0 && sizeof(utf8)) {
-                    utf8[0] = 0;
-                    WideCharToMultiByte(CP_UTF8, 0, utf16, -1, utf8, size, 0, 0);
-                    for (int i = 0; i < size - 1; i++) {
-                        add_key_to_queue((int) utf8[i]);
-                    }
-                }
-#else
                 add_key_to_queue((int)wParam);
-#endif
             }
         key_already_handled = FALSE;
         last_key_handled = 0;
@@ -2260,12 +2240,12 @@ int PDC_scr_open(void)
     if( hntdll)
         wine_version = (wine_version_func)GetProcAddress(hntdll, "wine_get_version");
 
-    if (shcoredll) {
+    if ( shcoredll) {
         typedef HRESULT(__stdcall *set_process_dpi_awareness_t)(int);
         static set_process_dpi_awareness_t set_process_dpi_awareness_func;
         static int ADJUST_DPI_PER_MONITOR = 2;
         set_process_dpi_awareness_func = (set_process_dpi_awareness_t)GetProcAddress(shcoredll, "SetProcessDpiAwareness");
-        if (set_process_dpi_awareness_func) {
+        if ( set_process_dpi_awareness_func) {
             set_process_dpi_awareness_func(ADJUST_DPI_PER_MONITOR);
         }
     }
